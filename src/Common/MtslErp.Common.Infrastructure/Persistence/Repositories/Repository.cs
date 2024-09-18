@@ -1,22 +1,20 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using MtslErp.Common.Domain.Interfaces;
 using MtslErp.Common.Domain.Repositories;
+using MtslErp.Common.Infrastructure.Extensions;
 
 namespace MtslErp.Common.Infrastructure.Persistence.Repositories;
 
-public abstract class Repository<TEntity, TKey>
-    : IRepositoryBase<TEntity, TKey>
-    where TEntity : class, IEntity<TKey>
-    where TKey : IEquatable<TKey>, IComparable
+public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
+    where TEntity : class
 {
-    protected readonly DbContext DbContext;
+    protected readonly DbContext DatabaseContext;
     protected readonly DbSet<TEntity> EntityDbSet;
 
     protected Repository(DbContext context)
     {
-        DbContext = context;
-        EntityDbSet = DbContext.Set<TEntity>();
+        DatabaseContext = context;
+        EntityDbSet = DatabaseContext.Set<TEntity>();
     }
 
     public virtual async Task CreateAsync(TEntity entity)
@@ -33,7 +31,7 @@ public abstract class Repository<TEntity, TKey>
     {
         return Task.Run(() =>
         {
-            if (DbContext.Entry(entityToDelete).State is EntityState.Detached)
+            if (DatabaseContext.Entry(entityToDelete).State is EntityState.Detached)
             {
                 EntityDbSet.Attach(entityToDelete);
             }
@@ -71,35 +69,61 @@ public abstract class Repository<TEntity, TKey>
         return Task.Run(() =>
         {
             EntityDbSet.Attach(entityToUpdate);
-            DbContext.Entry(entityToUpdate).State = EntityState.Modified;
+            DatabaseContext.Entry(entityToUpdate).State = EntityState.Modified;
         });
     }
 
+    public virtual async Task<ICollection<TEntity>> GetAllAsync<TSorter>(int page, int limit,
+        bool updateable,
+        Expression<Func<TEntity, TSorter>> orderBy,
+        bool ascendingOrder = true,
+        Expression<Func<TEntity, bool>>? condition = null,
+        CancellationToken cancellationToken = default)
+        where TSorter : IComparable<TSorter>
+    {
+        var query = EntityDbSet.AsQueryable();
+        if (condition is not null)
+        {
+            query = EntityDbSet.Where(condition);
+        }
+
+        query = ascendingOrder
+            ? query.OrderBy(orderBy)
+            : query.OrderByDescending(orderBy);
+
+        if (updateable is false)
+        {
+            query = query.AsNoTracking();
+        }
+
+        return await query.PaginateQueryable(page, limit).ToListAsync(cancellationToken);
+    }
+
     public virtual Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? condition = null,
-        CancellationToken ct = default)
+        CancellationToken cancellationToken = default)
     {
         return condition is not null
-            ? EntityDbSet.CountAsync(condition, ct)
-            : EntityDbSet.CountAsync(ct);
+            ? EntityDbSet.CountAsync(condition, cancellationToken)
+            : EntityDbSet.CountAsync(cancellationToken);
     }
 
     public Task TrackEntityAsync<T>(T entity) where T : class
     {
-        return Task.Run(() => DbContext.Set<T>().Attach(entity));
+        return Task.Run(() => DatabaseContext.Set<T>().Attach(entity));
     }
 
     public Task TrackEntityAsync(TEntity entity)
     {
-        return Task.Run(() => DbContext.Set<TEntity>().Attach(entity));
+        return Task.Run(() => DatabaseContext.Set<TEntity>().Attach(entity));
     }
 
     public Task ModifyEntityStateToAddedAsync(TEntity entity)
     {
         return Task.Run(() =>
         {
-            if (DbContext.Entry(entity).State is not EntityState.Added)
+            if (DatabaseContext.Entry(entity).State is not EntityState.Added)
             {
-                DbContext.Entry(entity).State = EntityState.Added;
+                DatabaseContext.Entry(entity).State = EntityState.Added;
             }
         });
     }
@@ -113,10 +137,26 @@ public abstract class Repository<TEntity, TKey>
                 return;
             }
 
-            if (DbContext.Entry(entity).State is not EntityState.Added)
+            if (DatabaseContext.Entry(entity).State is not EntityState.Added)
             {
-                DbContext.Entry(entity).State = EntityState.Added;
+                DatabaseContext.Entry(entity).State = EntityState.Added;
             }
         });
+    }
+
+    private static (int page, int limit) AvoidNegativeOrZeroPagination(int page, int limit)
+    {
+        var pagination = (page, limit);
+        if (page <= 0)
+        {
+            pagination.page = 1;
+        }
+
+        if (limit <= 0)
+        {
+            pagination.limit = 1;
+        }
+
+        return pagination;
     }
 }

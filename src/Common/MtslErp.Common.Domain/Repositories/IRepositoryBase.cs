@@ -1,19 +1,26 @@
 ﻿using System.Linq.Expressions;
-using MtslErp.Common.Domain.Interfaces;
 
 namespace MtslErp.Common.Domain.Repositories;
 
-public interface IRepositoryBase<TEntity, in TKey>
-    where TEntity : IEntity<TKey>
-    where TKey : IEquatable<TKey>, IComparable
+public interface IRepositoryBase<TEntity>
+
 {
     Task CreateAsync(TEntity entity);
     Task CreateManyAsync(ICollection<TEntity> entity);
 
     Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition,
         CancellationToken cancellationToken = default);
+
     Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition, bool updateable,
         CancellationToken cancellationToken = default);
+
+    Task<ICollection<TEntity>> GetAllAsync<TSorter>(int page, int limit,
+        bool updateable,
+        Expression<Func<TEntity, TSorter>> orderBy,
+        bool ascendingOrder = true,
+        Expression<Func<TEntity, bool>>? condition = null,
+        CancellationToken cancellationToken = default)
+        where TSorter : IComparable<TSorter>;
 
     Task UpdateAsync(TEntity entityToUpdate);
     Task RemoveAsync(TEntity entityToDelete);

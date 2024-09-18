@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
         <PackageReference Include="Serilog.Sinks.Email" Version="4.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+        <PackageReference Include="SharpOutcome" Version="0.0.10" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Update="SonarAnalyzer.CSharp" Version="9.32.0.97167">

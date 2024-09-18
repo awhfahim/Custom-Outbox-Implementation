@@ -37,6 +37,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrintFactoryManagement.Infr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MtslErp.Common.Domain", "src\Common\MtslErp.Common.Domain\MtslErp.Common.Domain.csproj", "{93E5623C-791E-4771-A9A0-BFF9D0359605}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SecurityManagement", "SecurityManagement", "{5A273004-C92D-48A7-B5B1-B82791340E4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityManagement.Domain", "src\Modules\SecurityManagement\SecurityManagement.Domain\SecurityManagement.Domain.csproj", "{50C4A849-1268-453C-A856-B2E0AECD23A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityManagement.Application", "src\Modules\SecurityManagement\SecurityManagement.Application\SecurityManagement.Application.csproj", "{BA872402-A11F-43AC-AC46-CAC1064A02BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityManagement.Infrastructure", "src\Modules\SecurityManagement\SecurityManagement.Infrastructure\SecurityManagement.Infrastructure.csproj", "{93ED0041-8486-4193-9813-9D8C2D20F68D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecurityManagement.HttpApi", "src\Modules\SecurityManagement\SecurityManagement.HttpApi\SecurityManagement.HttpApi.csproj", "{1A99F791-99AA-4A3C-9BF9-2617869FD0FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +89,22 @@ Global
 		{93E5623C-791E-4771-A9A0-BFF9D0359605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93E5623C-791E-4771-A9A0-BFF9D0359605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93E5623C-791E-4771-A9A0-BFF9D0359605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50C4A849-1268-453C-A856-B2E0AECD23A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C4A849-1268-453C-A856-B2E0AECD23A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C4A849-1268-453C-A856-B2E0AECD23A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C4A849-1268-453C-A856-B2E0AECD23A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA872402-A11F-43AC-AC46-CAC1064A02BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA872402-A11F-43AC-AC46-CAC1064A02BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA872402-A11F-43AC-AC46-CAC1064A02BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA872402-A11F-43AC-AC46-CAC1064A02BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93ED0041-8486-4193-9813-9D8C2D20F68D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93ED0041-8486-4193-9813-9D8C2D20F68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93ED0041-8486-4193-9813-9D8C2D20F68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93ED0041-8486-4193-9813-9D8C2D20F68D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A99F791-99AA-4A3C-9BF9-2617869FD0FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A99F791-99AA-4A3C-9BF9-2617869FD0FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A99F791-99AA-4A3C-9BF9-2617869FD0FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A99F791-99AA-4A3C-9BF9-2617869FD0FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +123,11 @@ Global
 		{6655B20C-0154-4B23-99D2-CAF60F221F4C} = {50626D01-08C2-453F-ABAC-B73439DC36D1}
 		{47532441-B8DC-44D2-A903-757FB73E5EC0} = {50626D01-08C2-453F-ABAC-B73439DC36D1}
 		{93E5623C-791E-4771-A9A0-BFF9D0359605} = {B4873DFA-98F0-487F-B8D5-B0595A72BFEB}
+		{5A273004-C92D-48A7-B5B1-B82791340E4F} = {1593BA88-6C6C-4970-8C80-12783BF88763}
+		{50C4A849-1268-453C-A856-B2E0AECD23A1} = {5A273004-C92D-48A7-B5B1-B82791340E4F}
+		{BA872402-A11F-43AC-AC46-CAC1064A02BA} = {5A273004-C92D-48A7-B5B1-B82791340E4F}
+		{93ED0041-8486-4193-9813-9D8C2D20F68D} = {5A273004-C92D-48A7-B5B1-B82791340E4F}
+		{1A99F791-99AA-4A3C-9BF9-2617869FD0FE} = {5A273004-C92D-48A7-B5B1-B82791340E4F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B88E83A-7318-4933-A76F-4C6EC00F6880}

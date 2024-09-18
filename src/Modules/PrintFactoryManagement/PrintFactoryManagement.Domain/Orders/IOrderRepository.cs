@@ -2,7 +2,7 @@
 
 namespace PrintFactoryManagement.Domain.Orders;
 
-public interface IOrderRepository : IRepositoryBase<Order, int>
+public interface IOrderRepository : IRepositoryBase<Order>
 {
 
 }
