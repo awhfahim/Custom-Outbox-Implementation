@@ -2,9 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MtslErp.Common.Application.Data;
-using MtslErp.Common.Domain.Repositories;
-using MtslErp.Common.Infrastructure.Data;
-using MtslErp.Common.Infrastructure.Persistence.Repositories;
 using PrintFactoryManagement.Application;
 using PrintFactoryManagement.Domain.Orders;
 using PrintFactoryManagement.Domain.Repositories;
@@ -18,11 +15,14 @@ namespace PrintFactoryManagement.Infrastructure;
 
 public static class InfrastructureConfiguration
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+        IConfiguration configuration)
     {
         #region repositories
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IPfmOutboxRepository, PfmOutboxRepository>();
+
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IPfmOutboxRepository, PfmOutboxRepository>();
+
         #endregion
 
         services.AddScoped<IPrintFactoryAppUnitOfWork, PfmAppUnitOfWork>();

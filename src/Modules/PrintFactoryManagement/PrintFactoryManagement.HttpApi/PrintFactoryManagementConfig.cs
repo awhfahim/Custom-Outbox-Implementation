@@ -31,7 +31,7 @@ public static class PrintFactoryManagementConfig
 public static class RabbitMqBusFactoryConfiguratorExtensions
 {
     public static void ConfigurePrintModuleAEndpoints(this IRabbitMqBusFactoryConfigurator configurator,
-        IBusRegistrationContext context, RabbitMQSettings rabbitMqSettings)
+        IBusRegistrationContext context, RabbitMqSettings rabbitMqSettings)
     {
         configurator.ReceiveEndpoint("order-created-event-queue", e =>
         {

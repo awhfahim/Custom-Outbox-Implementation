@@ -6,7 +6,7 @@ public static class ConfigurationExtensions
     {
         foreach (var module in modules)
         {
-            configurationBuilder.AddJsonFile($"modules.{module}.json", optional: false, true);
+            configurationBuilder.AddJsonFile($"{module}.module.json", optional: false, true);
         }
     }
 }

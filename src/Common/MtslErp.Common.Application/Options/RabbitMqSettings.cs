@@ -1,6 +1,6 @@
 ﻿namespace MtslErp.Common.Application.Options;
 
-public class RabbitMQSettings
+public class RabbitMqSettings
 {
     public required string Host { get; set; }
     public required string Username { get; set; }

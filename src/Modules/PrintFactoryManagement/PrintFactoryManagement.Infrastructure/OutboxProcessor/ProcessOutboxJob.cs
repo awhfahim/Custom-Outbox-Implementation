@@ -1,19 +1,29 @@
 ﻿using System.Text.Json;
 using Dapper;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using MtslErp.Common.Application.Data;
 using MtslErp.Common.Domain.Entities;
 using Quartz;
 
 namespace PrintFactoryManagement.Infrastructure.OutboxProcessor;
 
-public class ProcessOutboxJob(IDbConnectionFactory dbConnectionFactory, IBus bus) : IJob
+public class ProcessOutboxJob(
+    IDbConnectionFactory dbConnectionFactory,
+    ILogger<ProcessOutboxJob> logger,
+    IBus bus) : IJob
 {
     private const int BatchSize = 30;
 
     public async Task Execute(IJobExecutionContext context)
     {
         await using var connection = await dbConnectionFactory.OpenConnectionAsync();
+
+        if (connection is null)
+        {
+            return;
+        }
+
         await using var transaction = await connection.BeginTransactionAsync();
 
         try
@@ -24,7 +34,7 @@ public class ProcessOutboxJob(IDbConnectionFactory dbConnectionFactory, IBus bus
                 transaction: transaction);
 
             var outboxMessages = pendingOutboxMessages.ToList();
-            Console.WriteLine($"Processing {outboxMessages.Count} outbox messages");
+            logger.LogInformation("{Message}", $"Processing {outboxMessages.Count} outbox messages");
 
             foreach (var message in outboxMessages)
             {
@@ -52,7 +62,7 @@ public class ProcessOutboxJob(IDbConnectionFactory dbConnectionFactory, IBus bus
                         new { message.Status, message.SentOn, message.Id },
                         transaction: transaction);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Log and handle the exception
                     // Consider marking the message with a failed status or retry logic
@@ -61,7 +71,7 @@ public class ProcessOutboxJob(IDbConnectionFactory dbConnectionFactory, IBus bus
 
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync();
         }

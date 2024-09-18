@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MtslErp.Common.Infrastructure.Persistence.config;
+using MtslErp.Common.Infrastructure.Persistence.Config;
 using PrintFactoryManagement.Domain.Orders;
 
 namespace PrintFactoryManagement.Infrastructure.Persistence;

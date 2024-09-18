@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MtslErp.Common.Domain.Entities;
 
-namespace MtslErp.Common.Infrastructure.Persistence.config;
+namespace MtslErp.Common.Infrastructure.Persistence.Config;
 
 public class OutboxMessageConfig : IEntityTypeConfiguration<OutboxMessage>
 {

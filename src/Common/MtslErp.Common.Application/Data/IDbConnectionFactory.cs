@@ -4,5 +4,5 @@ namespace MtslErp.Common.Application.Data;
 
 public interface IDbConnectionFactory
 {
-    ValueTask<DbConnection> OpenConnectionAsync();
+    Task<DbConnection?> OpenConnectionAsync();
 }

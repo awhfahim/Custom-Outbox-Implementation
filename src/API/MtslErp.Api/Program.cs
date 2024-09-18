@@ -1,12 +1,11 @@
-using DotNetEnv;
-using MassTransit;
 using MtslErp.Api.Extensions;
 using MtslErp.Common.Application;
 using MtslErp.Common.Application.Extensions;
 using MtslErp.Common.Infrastructure;
 using PrintFactoryManagement.HttpApi;
-using Serilog;
 using Serilog.Events;
+using DotNetEnv;
+using Serilog;
 
 Env.Load();
 
@@ -26,7 +25,7 @@ try
     builder.Configuration.AddModuleConfiguration(["printFactory"]); // Add module configuration name here
     builder.Configuration.AddEnvironmentVariables();
 
-    builder.Services.AddSerilog((ctx, lc) => lc
+    builder.Services.AddSerilog((_, lc) => lc
         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
         .Enrich.FromLogContext()
         .ReadFrom.Configuration(configuration)

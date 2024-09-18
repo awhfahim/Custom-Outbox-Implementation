@@ -1,5 +1,4 @@
-﻿using MtslErp.Common.Domain.Interfaces;
-using MtslErp.Common.Domain.Repositories;
+﻿using MtslErp.Common.Domain.Repositories;
 
 namespace PrintFactoryManagement.Domain.Orders;
 

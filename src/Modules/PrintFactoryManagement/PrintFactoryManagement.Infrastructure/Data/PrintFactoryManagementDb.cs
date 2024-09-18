@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MtslErp.Common.Infrastructure.Data;
+namespace PrintFactoryManagement.Infrastructure.Data;
 
 public sealed class PrintFactoryManagementDb
 {

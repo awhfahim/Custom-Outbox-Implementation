@@ -14,7 +14,7 @@ public static class MasstransitConfigurationExtensions
         Action<IRegistrationConfigurator>[] moduleConfigureConsumers =
             [PrintFactoryManagementConfig.ConfigureConsumers]; // Add Consumers Here
 
-        var rabbitMqSettings = configuration.GetRequiredSection("RabbitMq").Get<RabbitMQSettings>();
+        var rabbitMqSettings = configuration.GetRequiredSection("RabbitMq").Get<RabbitMqSettings>();
 
         ArgumentNullException.ThrowIfNull(rabbitMqSettings);
 
@@ -60,7 +60,7 @@ public static class MasstransitConfigurationExtensions
     }
 
     private static void ConfigureModuleEndpoints(this IRabbitMqBusFactoryConfigurator configurator,
-        IBusRegistrationContext context, RabbitMQSettings rabbitMqSettings)
+        IBusRegistrationContext context, RabbitMqSettings rabbitMqSettings)
     {
         configurator.ConfigurePrintModuleAEndpoints(context, rabbitMqSettings);
     }

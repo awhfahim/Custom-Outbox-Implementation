@@ -20,19 +20,17 @@ public class PrintFactoryService : IPrintFactoryService
 
         var orderCreatedEvent = new OrderCreatedEvent()
         {
-            Name = order.Name,
-            Description = order.Description,
-            CreatedOnUtc = order.CreatedOnUtc
+            Name = order.Name, Description = order.Description, CreatedOnUtc = order.CreatedOnUtc
         };
 
         var orderCreatedMessage = JsonSerializer.Serialize(orderCreatedEvent);
 
-        var outbox = new OutboxMessage()
+        var outbox = new OutboxMessage
         {
             Payload = orderCreatedMessage,
             Status = true,
             CreatedOn = DateTime.Now,
-            PayloadType = typeof(OrderCreatedEvent).AssemblyQualifiedName!
+            PayloadType = typeof(OrderCreatedEvent).AssemblyQualifiedName ?? nameof(OrderCreatedEvent)
         };
 
         await _unitOfWork.PfmOutboxRepository.CreateAsync(outbox);
