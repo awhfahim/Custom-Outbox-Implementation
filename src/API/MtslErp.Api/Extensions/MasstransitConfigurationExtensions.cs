@@ -36,6 +36,7 @@ public static class MasstransitConfigurationExtensions
                     h.Heartbeat(60);
                 });
 
+                // Example of publishing an event with custom configuration
                 cfg.Publish<OrderCreatedEvent>(e =>
                 {
                     e.ExchangeType = ExchangeType.Fanout;
@@ -44,6 +45,13 @@ public static class MasstransitConfigurationExtensions
 
                 cfg.PrefetchCount = rabbitMqSettings.PrefetchCount;
                 cfg.ConcurrentMessageLimit = rabbitMqSettings.ConcurrentConsumers;
+                cfg.Durable = true;
+
+                cfg.UseMessageRetry(r =>
+                {
+                    r.Interval(3, TimeSpan.FromSeconds(5));
+                });
+
                 cfg.ConfigureModuleEndpoints(context, rabbitMqSettings);
             });
         });

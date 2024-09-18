@@ -26,7 +26,6 @@ public static class PrintFactoryManagementConfig
     public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
     {
         registrationConfigurator.AddConsumer<CreateOrderEventConsumer>();
-        registrationConfigurator.AddConsumer<TestEventConsumer>();
     }
 }
 public static class RabbitMqBusFactoryConfiguratorExtensions
@@ -41,27 +40,8 @@ public static class RabbitMqBusFactoryConfiguratorExtensions
             e.Bind<OrderCreatedEvent>(x =>
             {
                 x.ExchangeType = ExchangeType.Fanout;
-                x.Durable = true;
+                x.RoutingKey = "order-created-event";
             });
-
-            e.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
-            e.Durable = true;
-
-            e.ConfigureConsumer<CreateOrderEventConsumer>(context);
-        });
-
-        configurator.ReceiveEndpoint("test-event-queue", e =>
-        {
-            e.ConfigureConsumeTopology = false;
-
-            e.Bind<TestEvent>(x =>
-            {
-                x.ExchangeType = ExchangeType.Fanout;
-                x.Durable = true;
-            });
-
-            e.UseMessageRetry(r => r.Interval(3, TimeSpan.FromSeconds(5)));
-            e.Durable = true;
 
             e.ConfigureConsumer<CreateOrderEventConsumer>(context);
         });

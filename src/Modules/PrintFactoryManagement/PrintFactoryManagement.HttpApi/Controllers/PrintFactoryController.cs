@@ -23,18 +23,4 @@ public class PrintFactoryController(IPrintFactoryService printFactoryService)
         await printFactoryService.CreateAsync(order);
         return Ok("PrintFactory controller called");
     }
-
-    [HttpPost("fire-test-event")]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-    public async Task<IActionResult> FireTestEvent()
-    {
-        var order = new Order()
-        {
-            Name = "Test Event 1",
-            Description = "Test Event 1 description",
-            CreatedOnUtc = DateTime.Now
-        };
-        await printFactoryService.FireTestEvent(order);
-        return Ok("PrintFactory controller called");
-    }
 }

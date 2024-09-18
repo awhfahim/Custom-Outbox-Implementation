@@ -5,5 +5,4 @@ namespace PrintFactoryManagement.Application.Features.PrintFactoryFeatures.Servi
 public interface IPrintFactoryService
 {
     Task CreateAsync(Order order);
-    Task FireTestEvent(Order order);
 }

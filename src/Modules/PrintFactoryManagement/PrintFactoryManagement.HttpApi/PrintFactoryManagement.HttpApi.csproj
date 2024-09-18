@@ -6,8 +6,4 @@
       <ProjectReference Include="..\PrintFactoryManagement.Infrastructure\PrintFactoryManagement.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="IntegrationEventConsumers\" />
-    </ItemGroup>
-
 </Project>
