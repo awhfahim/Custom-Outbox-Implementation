@@ -8,6 +8,17 @@
 
     <ItemGroup>
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        
+        
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\MtslErp.Common.Infrastructure\MtslErp.Common.Infrastructure.csproj" />
+      <ProjectReference Include="..\SecurityManagement.Application\SecurityManagement.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Persistence\EntityConfigs\" />
     </ItemGroup>
 
 </Project>

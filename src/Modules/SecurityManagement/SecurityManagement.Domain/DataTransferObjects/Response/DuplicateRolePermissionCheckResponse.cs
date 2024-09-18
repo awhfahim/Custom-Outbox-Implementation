@@ -1,4 +1,4 @@
-namespace ErpSoftware.Domain.DataTransferObjects.Response.Auth;
+namespace SecurityManagement.Domain.DataTransferObjects.Response;
 
 public record DuplicateRolePermissionCheckResponse
 {

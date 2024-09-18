@@ -2,11 +2,13 @@
 
 public static class ConfigurationExtensions
 {
-    public static void AddModuleConfiguration(this IConfigurationBuilder configurationBuilder, string[] modules)
+    public static void AddModuleConfiguration(this IConfigurationBuilder configurationBuilder,
+        AvailableModule[] modules)
     {
         foreach (var module in modules)
         {
-            configurationBuilder.AddJsonFile($"{module}.module.json", optional: false, true);
+            configurationBuilder.AddJsonFile($"{module.ToString().ToLower()}.module.json", optional: false,
+                true);
         }
     }
 }

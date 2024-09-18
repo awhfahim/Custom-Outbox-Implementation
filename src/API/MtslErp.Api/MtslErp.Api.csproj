@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Modules\PrintFactoryManagement\PrintFactoryManagement.HttpApi\PrintFactoryManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\..\Modules\SecurityManagement\SecurityManagement.HttpApi\SecurityManagement.HttpApi.csproj" />
   </ItemGroup>
 
 </Project>

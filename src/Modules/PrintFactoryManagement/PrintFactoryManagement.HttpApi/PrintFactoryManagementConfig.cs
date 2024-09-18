@@ -13,7 +13,7 @@ namespace PrintFactoryManagement.HttpApi;
 
 public static class PrintFactoryManagementConfig
 {
-    public static IServiceCollection RegisterPrintFactoryManagementHttpApi(this IServiceCollection services,
+    public static IServiceCollection RegisterPrintFactoryManagement(this IServiceCollection services,
         IConfiguration configuration)
     {
         services.RegisterApplicationServices();

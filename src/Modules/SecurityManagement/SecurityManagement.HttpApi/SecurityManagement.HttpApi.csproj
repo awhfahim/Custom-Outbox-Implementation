@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\MtslErp.Common.HttpApi\MtslErp.Common.HttpApi.csproj" />
+      <ProjectReference Include="..\SecurityManagement.Infrastructure\SecurityManagement.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
