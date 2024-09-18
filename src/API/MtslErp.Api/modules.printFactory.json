@@ -1,0 +1,11 @@
+{
+  "PrintFactoryManagementDb" : {
+    "ConnectionString": "User Id=pfm;Password=pfm;Data Source=118.67.213.105:1521/mtexdev"
+  },
+  "PrintFactoryManagement": {
+    "Outbox": {
+      "IntervalInSeconds": 10,
+      "BatchSize": 20
+    }
+  }
+}

@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\MtslErp.Common.Application\MtslErp.Common.Application.csproj" />
+      <ProjectReference Include="..\PrintFactoryManagement.Domain\PrintFactoryManagement.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\PrintFactoryFeatures\DataTransferObjects\" />
+    </ItemGroup>
+
+</Project>

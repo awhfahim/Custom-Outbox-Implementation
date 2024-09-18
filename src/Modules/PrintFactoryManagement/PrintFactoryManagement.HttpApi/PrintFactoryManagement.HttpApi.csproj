@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\MtslErp.Common.HttpApi\MtslErp.Common.HttpApi.csproj" />
+      <ProjectReference Include="..\PrintFactoryManagement.Application\PrintFactoryManagement.Application.csproj" />
+      <ProjectReference Include="..\PrintFactoryManagement.Infrastructure\PrintFactoryManagement.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="IntegrationEventConsumers\" />
+    </ItemGroup>
+
+</Project>
