@@ -11,7 +11,7 @@ public interface IRepositoryBase<TEntity>
     Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition,
         CancellationToken cancellationToken = default);
 
-    Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition, bool updateable,
+    Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition, bool enableTracking,
         CancellationToken cancellationToken = default);
 
     Task<ICollection<TEntity>> GetAllAsync<TSorter>(int page, int limit,

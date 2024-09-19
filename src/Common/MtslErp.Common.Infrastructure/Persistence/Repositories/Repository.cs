@@ -8,13 +8,13 @@ namespace MtslErp.Common.Infrastructure.Persistence.Repositories;
 public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
     where TEntity : class
 {
-    protected readonly DbContext DatabaseContext;
+    private readonly DbContext _dbContext;
     protected readonly DbSet<TEntity> EntityDbSet;
 
     protected Repository(DbContext context)
     {
-        DatabaseContext = context;
-        EntityDbSet = DatabaseContext.Set<TEntity>();
+        _dbContext = context;
+        EntityDbSet = _dbContext.Set<TEntity>();
     }
 
     public virtual async Task CreateAsync(TEntity entity)
@@ -31,7 +31,7 @@ public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
     {
         return Task.Run(() =>
         {
-            if (DatabaseContext.Entry(entityToDelete).State is EntityState.Detached)
+            if (_dbContext.Entry(entityToDelete).State is EntityState.Detached)
             {
                 EntityDbSet.Attach(entityToDelete);
             }
@@ -46,11 +46,11 @@ public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
         return EntityDbSet.Where(condition).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition, bool updateable,
+    public Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition, bool enableTracking,
         CancellationToken cancellationToken = default)
     {
         var query = EntityDbSet.Where(condition);
-        if (updateable is false)
+        if (enableTracking is false)
         {
             query = query.AsNoTracking();
         }
@@ -69,7 +69,7 @@ public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
         return Task.Run(() =>
         {
             EntityDbSet.Attach(entityToUpdate);
-            DatabaseContext.Entry(entityToUpdate).State = EntityState.Modified;
+            _dbContext.Entry(entityToUpdate).State = EntityState.Modified;
         });
     }
 
@@ -109,21 +109,21 @@ public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
 
     public Task TrackEntityAsync<T>(T entity) where T : class
     {
-        return Task.Run(() => DatabaseContext.Set<T>().Attach(entity));
+        return Task.Run(() => _dbContext.Set<T>().Attach(entity));
     }
 
     public Task TrackEntityAsync(TEntity entity)
     {
-        return Task.Run(() => DatabaseContext.Set<TEntity>().Attach(entity));
+        return Task.Run(() => _dbContext.Set<TEntity>().Attach(entity));
     }
 
     public Task ModifyEntityStateToAddedAsync(TEntity entity)
     {
         return Task.Run(() =>
         {
-            if (DatabaseContext.Entry(entity).State is not EntityState.Added)
+            if (_dbContext.Entry(entity).State is not EntityState.Added)
             {
-                DatabaseContext.Entry(entity).State = EntityState.Added;
+                _dbContext.Entry(entity).State = EntityState.Added;
             }
         });
     }
@@ -137,9 +137,9 @@ public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
                 return;
             }
 
-            if (DatabaseContext.Entry(entity).State is not EntityState.Added)
+            if (_dbContext.Entry(entity).State is not EntityState.Added)
             {
-                DatabaseContext.Entry(entity).State = EntityState.Added;
+                _dbContext.Entry(entity).State = EntityState.Added;
             }
         });
     }

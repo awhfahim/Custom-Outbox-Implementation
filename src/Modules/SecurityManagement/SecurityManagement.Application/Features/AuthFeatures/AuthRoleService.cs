@@ -204,7 +204,7 @@ public class AuthRoleService : IAuthRoleService
     {
         var entity = await _appUnitOfWork
             .AuthorizableRoleRepository
-            .GetOneAsync(x => x.Id == roleId, updateable: false);
+            .GetOneAsync(x => x.Id == roleId, enableTracking: false);
 
         if (entity is null)
         {

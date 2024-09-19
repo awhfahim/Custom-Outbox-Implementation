@@ -10,7 +10,7 @@ using PrintFactoryManagement.Infrastructure.Persistence;
 
 namespace PrintFactoryManagement.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(PfmDbContext))]
+    [DbContext(typeof(PrintFactoryDbContext))]
     partial class PfmDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

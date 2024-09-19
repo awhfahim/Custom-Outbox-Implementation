@@ -8,7 +8,7 @@ using SecurityManagement.Domain.Entities;
 using SharpOutcome;
 using SharpOutcome.Helpers;
 
-namespace SecurityManagement.Application.Features.AuthFeatures;
+namespace SecurityManagement.Application.Features.AuthFeatures.Interfaces;
 
 public interface IUserService
 {

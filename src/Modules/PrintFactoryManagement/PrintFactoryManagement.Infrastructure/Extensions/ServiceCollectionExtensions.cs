@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PrintFactoryManagement.Application.Options;
+using MtslErp.Common.Application.Options;
 using PrintFactoryManagement.Infrastructure.Persistence;
 
 namespace PrintFactoryManagement.Infrastructure.Extensions;
@@ -12,24 +12,22 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         var dbUrl = configuration.GetRequiredSection(ConnectionStringOptions.SectionName)
-            .GetValue<string>(nameof(ConnectionStringOptions.ConnectionString));
+            .GetValue<string>(nameof(ConnectionStringOptions.OracleDbConnectionString));
 
         ArgumentNullException.ThrowIfNull(dbUrl);
 
-        var optionsBuilder = new DbContextOptionsBuilder<PfmDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<PrintFactoryDbContext>();
         optionsBuilder.UseOracle(dbUrl);
 
-        using (var dbContext = new PfmDbContext(optionsBuilder.Options))
+        using (var dbContext = new PrintFactoryDbContext(optionsBuilder.Options))
         {
             Console.WriteLine(dbContext.Database.CanConnect());
         }
 
-        services.AddDbContext<PfmDbContext>(
-            (sp, dbContextOptions) => dbContextOptions
-                .UseOracle(dbUrl, x =>
-                {
-                    x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19);
-                })
+        services.AddDbContext<PrintFactoryDbContext>(
+            (dbContextOptions) => dbContextOptions
+                .UseOracle(dbUrl,
+                    x => { x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); })
         );
 
         return services;

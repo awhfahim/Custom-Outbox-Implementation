@@ -4,9 +4,9 @@ using PrintFactoryManagement.Domain.Repositories;
 
 namespace PrintFactoryManagement.Infrastructure.Persistence;
 
-public class PfmAppUnitOfWork : PfmUnitOfWork, IPrintFactoryAppUnitOfWork
+public class PrintFactoryAppUnitOfWork : PrintFactoryUnitOfWork, IPrintFactoryAppUnitOfWork
 {
-    public PfmAppUnitOfWork(PfmDbContext dbContext,
+    public PrintFactoryAppUnitOfWork(PrintFactoryDbContext dbContext,
         IOrderRepository orderRepository, IPfmOutboxRepository pfmOutboxRepository) : base(dbContext)
     {
         OrderRepository = orderRepository;

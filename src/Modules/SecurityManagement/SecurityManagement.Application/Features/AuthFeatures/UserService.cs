@@ -81,7 +81,7 @@ public class UserService : IUserService
     public async Task<ValueOutcome<User, LoginBadOutcome>> LoginAsync(string userName, string password)
     {
         var entity = await _appUnitOfWork.UserRepository.GetOneAsync(
-            x => x.UserName == userName, updateable: false
+            x => x.UserName == userName, enableTracking: false
         );
 
         if (entity is null)
@@ -211,7 +211,7 @@ public class UserService : IUserService
 
     public Task<User?> ReadProfileAsync(long id)
     {
-        return _appUnitOfWork.UserRepository.GetOneAsync(x => x.Id == id, updateable: false);
+        return _appUnitOfWork.UserRepository.GetOneAsync(x => x.Id == id, enableTracking: false);
     }
 
     public async Task<PagedData<UserResponse>> ReadAllAsync(DynamicQueryDto dto)

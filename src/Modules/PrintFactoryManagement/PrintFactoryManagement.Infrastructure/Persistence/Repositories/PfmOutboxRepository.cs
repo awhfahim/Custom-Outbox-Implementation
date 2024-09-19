@@ -6,7 +6,7 @@ namespace PrintFactoryManagement.Infrastructure.Persistence.Repositories;
 
 public class PfmOutboxRepository : Repository<OutboxMessage>, IPfmOutboxRepository
 {
-    public PfmOutboxRepository(PfmDbContext context) : base(context)
+    public PfmOutboxRepository(PrintFactoryDbContext context) : base(context)
     {
     }
 }

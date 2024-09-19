@@ -1,0 +1,20 @@
+{
+  "JwtOptions": {
+    "Secret": "qw9eif8huwqco8yr9phuvfq8o7reyqno8ruyvqirgvqi7hfo87",
+    "AccessTokenExpiryMinutes": 800,
+    "RefreshTokenExpiryMinutes": 1000
+  },
+  "AdminUserSeedOptions": {
+    "userName": "admin",
+    "fullName": "Admin User",
+    "password": "admin@1234",
+    "maritalStatus": "UnMarried",
+    "gender": "Male",
+    "dateOfBirth": "1990-05-15"
+  },
+  "GoogleRecaptchaOptions": {
+    "SecretKey": "",
+    "SiteKey": "",
+    "VerificationEndpoint": "https://www.google.com/recaptcha/api/siteverify"
+  }
+}

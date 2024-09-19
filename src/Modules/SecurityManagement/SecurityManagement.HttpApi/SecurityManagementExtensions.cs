@@ -2,14 +2,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SecurityManagement.Application;
 using SecurityManagement.Application.Options;
+using SecurityManagement.Infrastructure;
 using SecurityManagement.Infrastructure.Extensions;
 
 namespace SecurityManagement.HttpApi;
 
 public static class SecurityManagementExtensions
 {
-    public static async Task<IServiceCollection> RegisterSecurityManagementAsync(this IServiceCollection services,
-        IConfiguration configuration, string? prefix = null)
+    public static async Task<IServiceCollection> RegisterSecurityManagementAsync(
+        this IServiceCollection services, IConfiguration configuration, string? prefix = null)
     {
         services.AddAntiforgery(options =>
         {
@@ -28,7 +29,9 @@ public static class SecurityManagementExtensions
         await services.SeedAdminUserAsync(configuration);
         await services.SeedPermissionsAsync(configuration);
         services.AddJwtAuth(configuration);
-
+        services.AddDatabaseConfig(configuration);
+        services.RegisterSecurityManagementApplicationServices();
+        services.RegisterSecurityManagementInfrastructureServices();
         return services;
     }
 }

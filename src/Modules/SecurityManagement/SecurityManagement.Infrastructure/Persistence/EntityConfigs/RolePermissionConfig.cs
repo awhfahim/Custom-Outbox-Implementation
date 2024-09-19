@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SecurityManagement.Domain.Entities;
-using static SecurityManagement.Domain.SecurityManagementDomainConstants;
+using static SecurityManagement.Domain.SecurityManagementDomainConstants.RolePermissionEntity;
 
 namespace SecurityManagement.Infrastructure.Persistence.EntityConfigs;
 
@@ -9,7 +9,7 @@ public class RolePermissionConfig : IEntityTypeConfiguration<RolePermission>
 {
     public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
-        builder.ToTable(RolePermissionEntity.DbTableName);
+        builder.ToTable(DbTableName);
 
         builder.HasKey(x => new { x.AuthorizableRoleId, x.AuthorizablePermissionId });
 

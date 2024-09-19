@@ -11,7 +11,7 @@ using PrintFactoryManagement.Infrastructure.Persistence;
 
 namespace PrintFactoryManagement.Infrastructure.Persistence.Migrations
 {
-    [DbContext(typeof(PfmDbContext))]
+    [DbContext(typeof(PrintFactoryDbContext))]
     [Migration("20240918030604_Initial")]
     partial class Initial
     {

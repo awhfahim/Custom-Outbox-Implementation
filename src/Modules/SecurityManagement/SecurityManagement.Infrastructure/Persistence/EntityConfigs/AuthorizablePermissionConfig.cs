@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SecurityManagement.Domain.Entities;
-using static SecurityManagement.Domain.SecurityManagementDomainConstants;
+using static SecurityManagement.Domain.SecurityManagementDomainConstants.AuthorizablePermissionEntity;
 
 namespace SecurityManagement.Infrastructure.Persistence.EntityConfigs;
 
@@ -9,8 +9,8 @@ public class AuthorizablePermissionConfig : IEntityTypeConfiguration<Authorizabl
 {
     public void Configure(EntityTypeBuilder<AuthorizablePermission> builder)
     {
-        builder.ToTable(AuthorizablePermissionEntity.DbTableName);
-        builder.Property(x => x.Label).HasMaxLength(AuthorizablePermissionEntity.LabelMaxLength);
+        builder.ToTable(DbTableName);
+        builder.Property(x => x.Label).HasMaxLength(LabelMaxLength);
         builder.HasIndex(x => x.Label).IsUnique();
 
         builder

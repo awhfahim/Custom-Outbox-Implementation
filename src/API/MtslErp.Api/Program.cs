@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using MtslErp.Api;
 using MtslErp.Common.Application.Options;
 using MtslErp.Common.HttpApi.Others;
+using MtslErp.Common.Infrastructure.Extensions;
 using SecurityManagement.Application;
 using SecurityManagement.HttpApi;
 using Serilog;
@@ -100,7 +101,7 @@ try
 
     builder.Services.RegisterPrintFactoryManagement(builder.Configuration);
     await builder.Services.RegisterSecurityManagementAsync(builder.Configuration);
-
+    builder.Services.AddRedisConfig(builder.Configuration);
 
     var app = builder.Build();
 

@@ -25,7 +25,7 @@ public static class InfrastructureConfiguration
 
         #endregion
 
-        services.AddScoped<IPrintFactoryAppUnitOfWork, PfmAppUnitOfWork>();
+        services.AddScoped<IPrintFactoryAppUnitOfWork, PrintFactoryAppUnitOfWork>();
         services.TryAddScoped<IDbConnectionFactory, PfmDbConnectionFactory>();
 
         services.AddOptions<PrintFactoryManagementDb>()

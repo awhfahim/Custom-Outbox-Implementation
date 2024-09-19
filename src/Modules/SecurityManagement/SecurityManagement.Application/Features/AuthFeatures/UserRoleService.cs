@@ -26,7 +26,7 @@ public class UserRoleService : IUserRoleService
         // missing user
         var entity = await _appUnitOfWork
             .UserRepository
-            .GetOneAsync(condition: x => x.Id == userId, updateable: false);
+            .GetOneAsync(condition: x => x.Id == userId, enableTracking: false);
 
         if (entity is null)
         {

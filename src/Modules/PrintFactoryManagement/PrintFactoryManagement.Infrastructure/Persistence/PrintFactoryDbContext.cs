@@ -4,7 +4,7 @@ using PrintFactoryManagement.Domain.Orders;
 
 namespace PrintFactoryManagement.Infrastructure.Persistence;
 
-public class PfmDbContext(DbContextOptions<PfmDbContext> options)
+public class PrintFactoryDbContext(DbContextOptions<PrintFactoryDbContext> options)
     : DbContext(options)
 {
     public DbSet<Order> Orders => Set<Order>();

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MtslErp.Common.Application.Options;
 using MtslErp.Common.Application.Providers;
 using MtslErp.Common.Domain.Enums;
 using MtslErp.Common.Infrastructure.Providers;
@@ -18,6 +19,31 @@ namespace SecurityManagement.Infrastructure.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+    public static IServiceCollection AddDatabaseConfig(this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var dbUrl = configuration.GetRequiredSection(ConnectionStringOptions.SectionName)
+            .GetValue<string>(nameof(ConnectionStringOptions.OracleDbConnectionString));
+
+        ArgumentNullException.ThrowIfNull(dbUrl);
+
+        var optionsBuilder = new DbContextOptionsBuilder<SecurityManagementDbContext>();
+        optionsBuilder.UseOracle(dbUrl);
+
+        using (var dbContext = new SecurityManagementDbContext(optionsBuilder.Options))
+        {
+            Console.WriteLine(dbContext.Database.CanConnect());
+        }
+
+        services.AddDbContext<SecurityManagementDbContext>(
+            (dbContextOptions) => dbContextOptions
+                .UseOracle(dbUrl,
+                    x => { x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); })
+        );
+
+        return services;
+    }
+
     public static IServiceCollection AddJwtAuth(this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -64,8 +90,8 @@ public static class ServiceCollectionExtensions
 
         ArgumentNullException.ThrowIfNull(seedData);
 
-        var dbUrl = configuration.GetRequiredSection(ConnectionStringsOptions.SectionName)
-            .GetValue<string>(nameof(ConnectionStringsOptions.ErpSoftwareDb));
+        var dbUrl = configuration.GetRequiredSection(ConnectionStringOptions.SectionName)
+            .GetValue<string>(nameof(ConnectionStringOptions.OracleDbConnectionString));
 
         var authCryptographyService = new AuthCryptographyService();
         var dateTimeProvider = new DateTimeProvider();
@@ -108,8 +134,8 @@ public static class ServiceCollectionExtensions
     public static async Task<IServiceCollection> SeedPermissionsAsync(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var dbUrl = configuration.GetRequiredSection(ConnectionStringsOptions.SectionName)
-            .GetValue<string>(nameof(ConnectionStringsOptions.ErpSoftwareDb));
+        var dbUrl = configuration.GetRequiredSection(ConnectionStringOptions.SectionName)
+            .GetValue<string>(nameof(ConnectionStringOptions.OracleDbConnectionString));
 
         var dateTimeProvider = new DateTimeProvider();
 

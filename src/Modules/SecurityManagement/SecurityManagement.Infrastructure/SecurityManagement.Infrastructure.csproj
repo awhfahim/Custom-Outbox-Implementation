@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <Folder Include="Persistence\EntityConfigs\" />
+      <Folder Include="Persistence\Repositories\" />
     </ItemGroup>
 
 </Project>
