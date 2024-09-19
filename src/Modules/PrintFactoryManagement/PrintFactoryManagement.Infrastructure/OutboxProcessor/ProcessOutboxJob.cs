@@ -34,7 +34,6 @@ public class ProcessOutboxJob(
                 transaction: transaction);
 
             var outboxMessages = pendingOutboxMessages.ToList();
-            logger.LogInformation("{Message}", $"Processing {outboxMessages.Count} outbox messages");
 
             foreach (var message in outboxMessages)
             {

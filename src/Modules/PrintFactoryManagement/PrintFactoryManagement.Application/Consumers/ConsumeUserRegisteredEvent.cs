@@ -6,31 +6,12 @@ using MtslErp.Common.Domain.Events;
 namespace PrintFactoryManagement.Application.Consumers;
 
 public sealed class UserRegisteredEventConsumer(
-    IPrintFactoryAppUnitOfWork printFactoryAppUnitOfWork,
     IDbConnectionFactory dbConnectionFactory)
     : IConsumer<UserRegisteredEvent>
 {
     public async Task Consume(ConsumeContext<UserRegisteredEvent> context)
     {
         Console.WriteLine($"User Registered Event Received: {context.Message.UserName}");
-
-        //Todo: Check if user already exists
-
-        Console.WriteLine(context.MessageId);
-
-        // var user = new User()
-        // {
-        //     FullName = context.Message.FullName,
-        //     UserName = context.Message.UserName,
-        //     Email = context.Message.Email,
-        //     PhoneNumber = context.Message.PhoneNumber,
-        //     DateOfBirth = context.Message.DateOfBirth,
-        //     Address = context.Message.Address,
-        //     ProfilePictureUri = context.Message.ProfilePictureUri
-        // };
-        //
-        // await printFactoryAppUnitOfWork.UserRepository.CreateAsync(user);
-        // await printFactoryAppUnitOfWork.SaveAsync();
 
         await using var connection = await dbConnectionFactory.OpenConnectionAsync();
 
@@ -78,6 +59,7 @@ public sealed class UserRegisteredEventConsumer(
         }
         catch (Exception)
         {
+            await transaction.RollbackAsync();
         }
     }
 }

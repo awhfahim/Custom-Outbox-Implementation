@@ -60,8 +60,10 @@ public class ProcessOutboxJob(
                 }
                 catch (Exception)
                 {
-                    // Log and handle the exception
-                    // Consider marking the message with a failed status or retry logic
+                    // await connection.ExecuteAsync(
+                    //     "UPDATE ACM.\"OutboxMessages\" SET \"Status\" = 2 WHERE \"Id\" = :Id",
+                    //     new { message.Id },
+                    //     transaction: transaction);
                 }
             }
 
