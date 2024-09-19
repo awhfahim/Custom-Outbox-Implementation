@@ -1,5 +1,6 @@
 using MtslErp.Common.Domain.Interfaces;
 using SecurityManagement.Domain.Repositories;
+using SecurityManagement.Domain.Repositories.Outbox;
 
 namespace SecurityManagement.Application;
 
@@ -11,4 +12,5 @@ public interface ISecurityManagementAppUnitOfWork : IUnitOfWork
     public IRolePermissionRepository RolePermissionRepository { get; }
     public IUserRoleRepository UserRoleRepository { get; }
     public IUserRepository UserRepository { get; }
+    public ISecurityManagementOutboxRepository SecurityManagementOutboxRepository { get; }
 }

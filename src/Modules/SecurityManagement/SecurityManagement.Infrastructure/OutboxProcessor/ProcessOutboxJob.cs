@@ -6,7 +6,7 @@ using MtslErp.Common.Application.Data;
 using MtslErp.Common.Domain.Entities;
 using Quartz;
 
-namespace PrintFactoryManagement.Infrastructure.OutboxProcessor;
+namespace SecurityManagement.Infrastructure.OutboxProcessor;
 
 public class ProcessOutboxJob(
     IDbConnectionFactory dbConnectionFactory,
@@ -29,12 +29,11 @@ public class ProcessOutboxJob(
         try
         {
             var pendingOutboxMessages = await connection.QueryAsync<OutboxMessage>(
-                "SELECT * FROM (SELECT * FROM PFM.\"OutboxMessages\" WHERE \"Status\" = 1) WHERE ROWNUM <= :BatchSize FOR UPDATE SKIP LOCKED",
+                "SELECT * FROM (SELECT * FROM ACM.\"OutboxMessages\" WHERE \"Status\" = 1) WHERE ROWNUM <= :BatchSize FOR UPDATE SKIP LOCKED",
                 new { BatchSize },
                 transaction: transaction);
 
             var outboxMessages = pendingOutboxMessages.ToList();
-            logger.LogInformation("{Message}", $"Processing {outboxMessages.Count} outbox messages");
 
             foreach (var message in outboxMessages)
             {
@@ -55,7 +54,7 @@ public class ProcessOutboxJob(
                     }
 
                     await connection.ExecuteAsync(
-                        "DELETE FROM PFM.\"OutboxMessages\" WHERE \"Id\" = :Id",
+                        "DELETE FROM ACM.\"OutboxMessages\" WHERE \"Id\" = :Id",
                         new { message.Id },
                         transaction: transaction);
                 }

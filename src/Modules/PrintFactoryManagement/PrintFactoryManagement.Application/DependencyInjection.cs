@@ -5,7 +5,7 @@ namespace PrintFactoryManagement.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IPrintFactoryService, PrintFactoryService>();
         return services;

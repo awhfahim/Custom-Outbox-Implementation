@@ -39,7 +39,7 @@ public class AccountController : JsonApiControllerBase
     }
 
     [HttpPost("registration")]
-    [ValidateAngularXsrfToken]
+    // [ValidateAngularXsrfToken]
     [ValidationActionFilter<UserSignupRequest>]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -63,7 +63,7 @@ public class AccountController : JsonApiControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    [ValidateAngularXsrfToken]
+    // [ValidateAngularXsrfToken]
     [ValidationActionFilter<UserLoginRequest>]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -106,7 +106,7 @@ public class AccountController : JsonApiControllerBase
 
     [HttpPost("check-token")]
     [Authorize]
-    [ValidateAngularXsrfToken]
+    // [ValidateAngularXsrfToken]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -135,7 +135,7 @@ public class AccountController : JsonApiControllerBase
 
     [HttpPost("refresh-access-token")]
     [Authorize]
-    [ValidateAngularXsrfToken]
+    // [ValidateAngularXsrfToken]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -158,7 +158,7 @@ public class AccountController : JsonApiControllerBase
 
     [HttpPost("logout")]
     [Authorize]
-    [ValidateAngularXsrfToken]
+    // [ValidateAngularXsrfToken]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

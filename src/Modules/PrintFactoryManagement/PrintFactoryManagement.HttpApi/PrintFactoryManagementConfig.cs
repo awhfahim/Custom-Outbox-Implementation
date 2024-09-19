@@ -4,10 +4,10 @@ using Microsoft.Extensions.DependencyInjection;
 using MtslErp.Common.Application.Options;
 using MtslErp.Common.Domain.Events;
 using PrintFactoryManagement.Application;
-using PrintFactoryManagement.HttpApi.Consumers;
+using PrintFactoryManagement.Application.Consumers;
 using PrintFactoryManagement.Infrastructure;
 using PrintFactoryManagement.Infrastructure.Extensions;
-using ExchangeType = RabbitMQ.Client.ExchangeType;
+using RabbitMQ.Client;
 
 namespace PrintFactoryManagement.HttpApi;
 
@@ -16,8 +16,8 @@ public static class PrintFactoryManagementConfig
     public static IServiceCollection RegisterPrintFactoryManagement(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.RegisterApplicationServices();
-        services.AddInfrastructure(configuration);
+        services.AddApplicationServices();
+        services.AddInfrastructureServices(configuration);
         services.AddDatabaseConfig(configuration);
 
         return services;
@@ -25,25 +25,25 @@ public static class PrintFactoryManagementConfig
 
     public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
     {
-        registrationConfigurator.AddConsumer<CreateOrderEventConsumer>();
+        registrationConfigurator.AddConsumer<UserRegisteredEventConsumer>();
     }
 }
 public static class RabbitMqBusFactoryConfiguratorExtensions
 {
-    public static void ConfigurePrintModuleAEndpoints(this IRabbitMqBusFactoryConfigurator configurator,
+    public static void ConfigurePrintModuleEndpoints(this IRabbitMqBusFactoryConfigurator configurator,
         IBusRegistrationContext context, RabbitMqSettings rabbitMqSettings)
     {
-        configurator.ReceiveEndpoint("order-created-event-queue", e =>
+        configurator.ReceiveEndpoint("user-created-event-queue", e =>
         {
             e.ConfigureConsumeTopology = false;
 
-            e.Bind<OrderCreatedEvent>(x =>
+            e.Bind<UserRegisteredEvent>(x =>
             {
                 x.ExchangeType = ExchangeType.Fanout;
-                x.RoutingKey = "order-created-event";
+                x.RoutingKey = "user-created-event";
             });
 
-            e.ConfigureConsumer<CreateOrderEventConsumer>(context);
+            e.ConfigureConsumer<UserRegisteredEventConsumer>(context);
         });
     }
 }

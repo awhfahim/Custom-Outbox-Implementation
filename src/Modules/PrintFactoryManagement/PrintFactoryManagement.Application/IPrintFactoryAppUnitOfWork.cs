@@ -1,11 +1,11 @@
 ﻿using MtslErp.Common.Domain.Interfaces;
-using PrintFactoryManagement.Domain.Orders;
 using PrintFactoryManagement.Domain.Repositories;
+using PrintFactoryManagement.Domain.Repositories.Outbox;
 
 namespace PrintFactoryManagement.Application;
 
 public interface IPrintFactoryAppUnitOfWork : IUnitOfWork
 {
-    IOrderRepository OrderRepository { get; }
-    IPfmOutboxRepository PfmOutboxRepository { get; }
+    IPrintFactoryOutboxRepository PrintFactoryOutboxRepository { get; }
+    IUserRepository UserRepository { get; }
 }

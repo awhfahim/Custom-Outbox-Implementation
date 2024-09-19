@@ -97,7 +97,8 @@ public static class ServiceCollectionExtensions
         var dateTimeProvider = new DateTimeProvider();
 
         var optionsBuilder = new DbContextOptionsBuilder<SecurityManagementDbContext>();
-        optionsBuilder.UseOracle(dbUrl);
+        optionsBuilder.UseOracle(dbUrl,
+            x => { x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); });
 
         await using var dbContext = new SecurityManagementDbContext(optionsBuilder.Options);
 
@@ -139,7 +140,8 @@ public static class ServiceCollectionExtensions
 
         var dateTimeProvider = new DateTimeProvider();
 
-        var optionsBuilder = new DbContextOptionsBuilder<SecurityManagementDbContext>().UseOracle(dbUrl);
+        var optionsBuilder = new DbContextOptionsBuilder<SecurityManagementDbContext>().UseOracle(dbUrl,
+            x => { x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); });
 
         await using var dbContext = new SecurityManagementDbContext(optionsBuilder.Options);
 

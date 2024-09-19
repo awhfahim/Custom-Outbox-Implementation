@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MtslErp.Common.Domain.Interfaces;
+using MtslErp.Common.Infrastructure.Persistence.Config;
 using SecurityManagement.Domain.Entities;
 
 namespace SecurityManagement.Infrastructure.Persistence;
@@ -22,6 +23,7 @@ public class SecurityManagementDbContext(DbContextOptions<SecurityManagementDbCo
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema(SecurityManagementInfrastructureConstants.DbSchema);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SecurityManagementDbContext).Assembly);
+        modelBuilder.ApplyConfiguration(new OutboxMessageConfig());
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {

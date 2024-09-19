@@ -4,6 +4,8 @@ using SecurityManagement.Application;
 using SecurityManagement.Application.Options;
 using SecurityManagement.Infrastructure;
 using SecurityManagement.Infrastructure.Extensions;
+using MassTransit;
+using MtslErp.Common.Application.Options;
 
 namespace SecurityManagement.HttpApi;
 
@@ -33,5 +35,19 @@ public static class SecurityManagementExtensions
         services.RegisterSecurityManagementApplicationServices();
         services.RegisterSecurityManagementInfrastructureServices();
         return services;
+    }
+
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
+    {
+
+    }
+}
+
+public static class RabbitMqBusFactoryConfiguratorExtensions
+{
+    public static void ConfigureSecurityManagementEndpoints(this IRabbitMqBusFactoryConfigurator configurator,
+        IBusRegistrationContext context, RabbitMqSettings rabbitMqSettings)
+    {
+
     }
 }

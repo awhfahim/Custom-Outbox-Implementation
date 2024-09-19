@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using MtslErp.Common.Application.Providers;
@@ -18,6 +19,8 @@ using SharpOutcome;
 using SharpOutcome.Helpers;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using MtslErp.Common.Domain.Entities;
+using MtslErp.Common.Domain.Events;
 
 namespace SecurityManagement.Application.Features.AuthFeatures;
 
@@ -70,9 +73,32 @@ public class UserService : IUserService
             PhoneNumber = dto.PhoneNumber,
             Status = UserStatus.Active,
             PasswordHash = await _authCryptographyService.HashPasswordAsync(dto.Password),
-            CreatedAtUtc = _dateTimeProvider.CurrentUtcTime
+            CreatedAtUtc = _dateTimeProvider.CurrentUtcTime,
+            Address = dto.Address
         };
 
+        var userRegisteredEvent = new UserRegisteredEvent
+        {
+            UserName = dto.UserName,
+            FullName = dto.FullName,
+            PhoneNumber = dto.PhoneNumber,
+            Email = dto.Email,
+            DateOfBirth = dto.DateOfBirth,
+            Address = dto.Address,
+            ProfilePictureUri = entity.ProfilePictureUri
+        };
+
+        var payload = JsonSerializer.Serialize(userRegisteredEvent);
+
+        var outboxMessage = new OutboxMessage()
+        {
+            Payload = payload,
+            PayloadType = typeof(UserRegisteredEvent).AssemblyQualifiedName ?? string.Empty,
+            CreatedOn = _dateTimeProvider.CurrentUtcTime,
+            Status = true
+        };
+
+        await _appUnitOfWork.SecurityManagementOutboxRepository.CreateAsync(outboxMessage);
         await _appUnitOfWork.UserRepository.CreateAsync(entity);
         await _appUnitOfWork.SaveAsync();
         return entity;

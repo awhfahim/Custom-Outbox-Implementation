@@ -1,8 +1,8 @@
 ﻿using MassTransit;
 using MtslErp.Common.Application.Options;
-using MtslErp.Common.Domain.Events;
 using PrintFactoryManagement.HttpApi;
 using RabbitMQ.Client;
+using SecurityManagement.HttpApi;
 
 namespace MtslErp.Api.Extensions;
 
@@ -12,7 +12,8 @@ public static class MasstransitConfigurationExtensions
         IConfiguration configuration)
     {
         Action<IRegistrationConfigurator>[] moduleConfigureConsumers =
-            [PrintFactoryManagementConfig.ConfigureConsumers]; // Add Consumers Here
+            [PrintFactoryManagementConfig.ConfigureConsumers,
+                SecurityManagementExtensions.ConfigureConsumers]; // Add Consumers Here
 
         var rabbitMqSettings = configuration.GetRequiredSection("RabbitMq").Get<RabbitMqSettings>();
 
@@ -36,13 +37,6 @@ public static class MasstransitConfigurationExtensions
                     h.Heartbeat(60);
                 });
 
-                // Example of publishing an event with custom configuration
-                cfg.Publish<OrderCreatedEvent>(e =>
-                {
-                    e.ExchangeType = ExchangeType.Fanout;
-                    e.Durable = true;
-                });
-
                 cfg.PrefetchCount = rabbitMqSettings.PrefetchCount;
                 cfg.ConcurrentMessageLimit = rabbitMqSettings.ConcurrentConsumers;
                 cfg.Durable = true;
@@ -62,7 +56,8 @@ public static class MasstransitConfigurationExtensions
     private static void ConfigureModuleEndpoints(this IRabbitMqBusFactoryConfigurator configurator,
         IBusRegistrationContext context, RabbitMqSettings rabbitMqSettings)
     {
-        configurator.ConfigurePrintModuleAEndpoints(context, rabbitMqSettings);
+        configurator.ConfigurePrintModuleEndpoints(context, rabbitMqSettings);
+        configurator.ConfigureSecurityManagementEndpoints(context, rabbitMqSettings);
     }
 }
 

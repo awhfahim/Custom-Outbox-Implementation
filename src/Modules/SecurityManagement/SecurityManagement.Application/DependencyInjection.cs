@@ -11,7 +11,7 @@ public static class DependencyInjection
     public static IServiceCollection RegisterSecurityManagementApplicationServices(
         this IServiceCollection services)
     {
-        services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjectionExtensions));
+        services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
 
         services.TryAddScoped<IAuthPermissionService, AuthPermissionService>();
         services.TryAddScoped<IAuthRoleService, AuthRoleService>();

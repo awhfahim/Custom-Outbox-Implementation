@@ -7,9 +7,11 @@ using SecurityManagement.Application;
 using SecurityManagement.Application.Features.AuthFeatures.Interfaces;
 using SecurityManagement.Application.Providers;
 using SecurityManagement.Domain.Repositories;
+using SecurityManagement.Domain.Repositories.Outbox;
 using SecurityManagement.Infrastructure.Auth;
 using SecurityManagement.Infrastructure.Persistence;
 using SecurityManagement.Infrastructure.Persistence.Repositories;
+using SecurityManagement.Infrastructure.Persistence.Repositories.Outbox;
 using SecurityManagement.Infrastructure.Providers;
 
 namespace SecurityManagement.Infrastructure;
@@ -34,6 +36,12 @@ public static class DependencyInjection
         services.TryAddScoped<IAuthorizablePermissionRepository, AuthorizablePermissionRepository>();
         services.TryAddScoped<IAuthorizablePermissionGroupRepository,
             AuthorizablePermissionGroupRepository>();
+
+        services.TryAddScoped<ISecurityManagementOutboxRepository, SecurityManagementOutboxRepository>();
+
+        services
+            .ConfigureOptions<
+                SecurityManagement.Infrastructure.OutboxProcessor.ConfigureProcessOutboxJob>();
 
         return services;
     }

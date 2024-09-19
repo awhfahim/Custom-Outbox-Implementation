@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oracle.EntityFrameworkCore.Metadata;
 using SecurityManagement.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using SecurityManagement.Infrastructure.Persistence;
 namespace SecurityManagement.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SecurityManagementDbContext))]
-    partial class SecurityManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240919081328_AddOutboxTable")]
+    partial class AddOutboxTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

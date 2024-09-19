@@ -22,8 +22,5 @@ public class OutboxMessageConfig : IEntityTypeConfiguration<OutboxMessage>
 
         builder.Property(e => e.CreatedOn)
             .IsRequired();
-
-        builder.Property(e => e.SentOn)
-            .IsRequired(false);
     }
 }
