@@ -13,6 +13,7 @@ using SecurityManagement.Application.Features.AuthFeatures.DataTransferObjects;
 using SecurityManagement.Application.Features.AuthFeatures.Interfaces;
 using SecurityManagement.Application.Features.AuthFeatures.Outcomes;
 using SecurityManagement.Application.Options;
+using SecurityManagement.Infrastructure.Persistence.ExecuteStoredProcedures;
 
 namespace SecurityManagement.HttpApi.Controllers;
 
@@ -22,12 +23,14 @@ public class AccountController : JsonApiControllerBase
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly GoogleRecaptchaOptions _googleRecaptchaOptions;
     private readonly IUserService _userService;
+    private readonly IServiceProvider _serviceProvider;
 
     public AccountController(IHttpClientFactory httpClientFactory,
-        IOptions<GoogleRecaptchaOptions> googleRecaptchaOptions, IUserService userService)
+        IOptions<GoogleRecaptchaOptions> googleRecaptchaOptions, IUserService userService, IServiceProvider serviceProvider)
     {
         _httpClientFactory = httpClientFactory;
         _userService = userService;
+        _serviceProvider = serviceProvider;
         _googleRecaptchaOptions = googleRecaptchaOptions.Value;
     }
 
@@ -188,5 +191,13 @@ public class AccountController : JsonApiControllerBase
         {
             return false;
         }
+    }
+
+    [HttpGet("call-stored-procedure")]
+    public async Task<IActionResult> CallStoredProcedure()
+    {
+        var test = new Test(_serviceProvider);
+        var result = await test.TestMethod();
+        return Ok(result);
     }
 }
