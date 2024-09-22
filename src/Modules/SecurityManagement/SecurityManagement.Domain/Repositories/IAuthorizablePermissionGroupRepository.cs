@@ -4,6 +4,6 @@ using SecurityManagement.Domain.Entities;
 namespace SecurityManagement.Domain.Repositories;
 
 public interface IAuthorizablePermissionGroupRepository
-    : ITimestampedEntityRepository<AuthorizablePermissionGroup>
+    : IRepositoryBase<AuthorizablePermissionGroup>
 {
 }

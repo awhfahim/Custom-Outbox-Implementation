@@ -1,5 +1,8 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using MtslErp.Common.Domain.CoreProviders;
+using MtslErp.Common.Domain.DataTransferObjects.Request;
+using MtslErp.Common.Domain.DataTransferObjects.Response;
 using MtslErp.Common.Domain.Repositories;
 using MtslErp.Common.Infrastructure.Extensions;
 
@@ -158,5 +161,30 @@ public abstract class Repository<TEntity> : IRepositoryBase<TEntity>
         }
 
         return pagination;
+    }
+
+    public virtual async Task<PagedData<TEntity>> GetPagedDataForDynamicQueryAsync<TSorter>(DynamicQueryDto dto,
+        (Expression<Func<TEntity, TSorter>> orderBy, bool desc) defaultSorter,
+        IReflectionCacheProvider reflectionCacheProvider,
+        CancellationToken cancellationToken = default) where TSorter : IComparable<TSorter>
+    {
+        var data = EntityDbSet.WhereDynamic(dto.Filters, reflectionCacheProvider);
+
+        if (dto.Sorters.Count == 0)
+        {
+            data = defaultSorter.desc
+                ? data.OrderByDescending(defaultSorter.orderBy)
+                : data.OrderBy(defaultSorter.orderBy);
+        }
+
+        else
+        {
+            data = data.OrderBy(dto.Sorters, reflectionCacheProvider);
+        }
+
+
+        var count = await data.LongCountAsync(cancellationToken);
+        data = data.PaginateQueryable(dto.Page, dto.Size);
+        return new PagedData<TEntity>(await data.ToListAsync(cancellationToken), count);
     }
 }

@@ -1,19 +1,18 @@
 ﻿using System.Linq.Expressions;
+using MtslErp.Common.Domain.CoreProviders;
+using MtslErp.Common.Domain.DataTransferObjects.Request;
+using MtslErp.Common.Domain.DataTransferObjects.Response;
 
 namespace MtslErp.Common.Domain.Repositories;
 
 public interface IRepositoryBase<TEntity>
-
 {
     Task CreateAsync(TEntity entity);
     Task CreateManyAsync(ICollection<TEntity> entity);
-
     Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition,
         CancellationToken cancellationToken = default);
-
     Task<TEntity?> GetOneAsync(Expression<Func<TEntity, bool>> condition, bool enableTracking,
         CancellationToken cancellationToken = default);
-
     Task<ICollection<TEntity>> GetAllAsync<TSorter>(int page, int limit,
         bool updateable,
         Expression<Func<TEntity, TSorter>> orderBy,
@@ -21,18 +20,19 @@ public interface IRepositoryBase<TEntity>
         Expression<Func<TEntity, bool>>? condition = null,
         CancellationToken cancellationToken = default)
         where TSorter : IComparable<TSorter>;
-
     Task UpdateAsync(TEntity entityToUpdate);
     Task RemoveAsync(TEntity entityToDelete);
-
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> condition,
         CancellationToken cancellationToken = default);
-
     Task<int> GetCountAsync(Expression<Func<TEntity, bool>>? condition = null,
         CancellationToken ct = default);
-
     Task ModifyEntityStateToAddedAsync<T>(T entity);
     Task ModifyEntityStateToAddedAsync(TEntity entity);
     Task TrackEntityAsync<T>(T entity) where T : class;
     Task TrackEntityAsync(TEntity entity);
+    Task<PagedData<TEntity>> GetPagedDataForDynamicQueryAsync<TSorter>(DynamicQueryDto dto,
+        (Expression<Func<TEntity, TSorter>> orderBy, bool desc) defaultSorter,
+        IReflectionCacheProvider reflectionCacheProvider,
+        CancellationToken cancellationToken = default)
+        where TSorter : IComparable<TSorter>;
 }

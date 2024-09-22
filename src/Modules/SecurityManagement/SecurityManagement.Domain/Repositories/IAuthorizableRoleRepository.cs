@@ -7,7 +7,7 @@ using SecurityManagement.Domain.Entities;
 
 namespace SecurityManagement.Domain.Repositories;
 
-public interface IAuthorizableRoleRepository : ITimestampedEntityRepository<AuthorizableRole>
+public interface IAuthorizableRoleRepository : IRepositoryBase<AuthorizableRole>
 {
     Task<IReadOnlyCollection<AuthCheckResponse>> CheckForExistingRoles(
         IReadOnlyCollection<long> roleIds);

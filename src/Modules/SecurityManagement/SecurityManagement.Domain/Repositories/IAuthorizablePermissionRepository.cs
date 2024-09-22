@@ -7,7 +7,7 @@ using SecurityManagement.Domain.Entities;
 
 namespace SecurityManagement.Domain.Repositories;
 
-public interface IAuthorizablePermissionRepository : ITimestampedEntityRepository<AuthorizablePermission>
+public interface IAuthorizablePermissionRepository : IRepositoryBase<AuthorizablePermission>
 {
     Task<PagedData<AuthorizablePermissionResponse>> GetAllAsync(DynamicQueryDto dto,
         IReflectionCacheProvider reflectionCacheProvider, CancellationToken ct = default);

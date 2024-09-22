@@ -10,7 +10,7 @@ using SecurityManagement.Domain.Repositories;
 
 namespace SecurityManagement.Infrastructure.Persistence.Repositories;
 
-public class AuthorizablePermissionRepository : TimestampedEntityRepository<AuthorizablePermission>,
+public class AuthorizablePermissionRepository : Repository<AuthorizablePermission>,
     IAuthorizablePermissionRepository
 {
     private readonly SecurityManagementDbContext _securityManagementDbContext;

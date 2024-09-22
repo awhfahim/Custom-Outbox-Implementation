@@ -4,7 +4,7 @@ using SecurityManagement.Domain.Repositories;
 
 namespace SecurityManagement.Infrastructure.Persistence.Repositories;
 
-public class AuthorizablePermissionGroupRepository : TimestampedEntityRepository<AuthorizablePermissionGroup>,
+public class AuthorizablePermissionGroupRepository : Repository<AuthorizablePermissionGroup>,
     IAuthorizablePermissionGroupRepository
 {
     private readonly SecurityManagementDbContext _securityManagementDbContext;

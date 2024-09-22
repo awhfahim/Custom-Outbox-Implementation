@@ -29,11 +29,11 @@ public class AuthRoleService : IAuthRoleService
         _keyValueCache = keyValueCache;
     }
 
-    public async Task<PagedData<AuthorizableRole>> ReadAllAsync(DynamicQueryDto dto,
+    public Task<PagedData<AuthorizableRole>> ReadAllAsync(DynamicQueryDto dto,
         CancellationToken ct = default)
     {
-        return await _appUnitOfWork.AuthorizableRoleRepository.GetPagedDataForDynamicQueryAsync(dto,
-            _reflectionCacheProvider, ct);
+        return _appUnitOfWork.AuthorizableRoleRepository.GetPagedDataForDynamicQueryAsync(dto,
+            (x => x.Id, false), _reflectionCacheProvider, ct);
     }
 
     public async Task ClearRolePermissionsCacheAsync(string roleLabel)
