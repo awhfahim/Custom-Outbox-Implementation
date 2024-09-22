@@ -3,7 +3,7 @@ using MassTransit;
 using MtslErp.Common.Application.Data;
 using MtslErp.Common.Domain.Events;
 
-namespace PrintFactoryManagement.Application.Consumers;
+namespace PrintFactoryManagement.Infrastructure.Consumers;
 
 public sealed class UserRegisteredEventConsumer(
     IDbConnectionFactory dbConnectionFactory)
@@ -31,6 +31,7 @@ public sealed class UserRegisteredEventConsumer(
 
             if (result is not null)
             {
+                await context.ConsumeCompleted;
                 return;
             }
 

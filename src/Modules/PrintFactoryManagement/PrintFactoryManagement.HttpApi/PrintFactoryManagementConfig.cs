@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MtslErp.Common.Application.Options;
 using MtslErp.Common.Domain.Events;
 using PrintFactoryManagement.Application;
-using PrintFactoryManagement.Application.Consumers;
 using PrintFactoryManagement.Infrastructure;
+using PrintFactoryManagement.Infrastructure.Consumers;
 using PrintFactoryManagement.Infrastructure.Extensions;
 using RabbitMQ.Client;
 

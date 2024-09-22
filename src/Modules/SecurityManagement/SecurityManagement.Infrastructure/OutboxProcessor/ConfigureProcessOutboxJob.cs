@@ -15,6 +15,6 @@ internal sealed class ConfigureProcessOutboxJob
             .AddTrigger(configure =>
                 configure.ForJob(jobName)
                     .WithSimpleSchedule(schedule =>
-                        schedule.WithIntervalInSeconds(10).RepeatForever()));
+                        schedule.WithIntervalInSeconds(5).RepeatForever()));
     }
 }
