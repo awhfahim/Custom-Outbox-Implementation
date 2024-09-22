@@ -1,11 +1,13 @@
-using ErpSoftware.Application.Features.AuthFeatures.Interfaces;
-using ErpSoftware.Application.Features.AuthFeatures;
 using Microsoft.AspNetCore.Authorization;
-using ErpSoftware.HttpApi.ActionFilters;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
-using ErpSoftware.Application;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using MtslErp.Common.HttpApi.ActionFilters;
+using MtslErp.Common.HttpApi.Controllers;
+using SecurityManagement.Application;
+using SecurityManagement.Application.Features.AuthFeatures;
+using SecurityManagement.Application.Features.AuthFeatures.Interfaces;
 
 namespace ErpSoftware.HttpApi.Controllers.Auth;
 
@@ -56,7 +58,7 @@ public class SecurityController : JsonApiControllerBase
         {
             var accessTokenData = userService.IssueAccessTokenByRefreshToken(data, rememberMe);
 
-            HttpContext.Response.Cookies.Append(ApplicationConstants.AccessTokenCookieKey,
+            HttpContext.Response.Cookies.Append(SecurityManagementApplicationConstants.AccessTokenCookieKey,
                 accessTokenData.Token, accessTokenData.CookieOptions);
 
             return Ok();
@@ -69,7 +71,7 @@ public class SecurityController : JsonApiControllerBase
     public IActionResult LoadXsrf([FromServices] IAntiforgery antiForgery)
     {
         var token = antiForgery.GetAndStoreTokens(HttpContext);
-        HttpContext.Response.Headers.Append(ApplicationConstants.XsrfTokenHeaderKey, token.RequestToken);
+        HttpContext.Response.Headers.Append(SecurityManagementApplicationConstants.XsrfTokenHeaderKey, token.RequestToken);
         return Ok();
     }
 }

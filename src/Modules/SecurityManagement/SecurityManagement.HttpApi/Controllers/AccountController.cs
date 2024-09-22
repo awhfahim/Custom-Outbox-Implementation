@@ -1,19 +1,19 @@
-using System.Security.Claims;
-using ErpSoftware.Application;
-using ErpSoftware.Application.Common.Options;
-using ErpSoftware.Application.Features.AuthFeatures;
-using ErpSoftware.Application.Features.AuthFeatures.DataTransferObjects;
-using ErpSoftware.Application.Features.AuthFeatures.Interfaces;
-using ErpSoftware.Application.Features.AuthFeatures.Outcomes;
-using ErpSoftware.Domain.DataTransferObjects.Request;
-using ErpSoftware.HttpApi.ActionFilters;
-using ErpSoftware.HttpApi.Others;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using MtslErp.Common.Domain.DataTransferObjects.Request;
+using MtslErp.Common.HttpApi.ActionFilters;
+using MtslErp.Common.HttpApi.Controllers;
+using MtslErp.Common.HttpApi.Others;
+using SecurityManagement.Application;
+using SecurityManagement.Application.Features.AuthFeatures.DataTransferObjects;
+using SecurityManagement.Application.Features.AuthFeatures.Interfaces;
+using SecurityManagement.Application.Features.AuthFeatures.Outcomes;
+using SecurityManagement.Application.Options;
 using SecurityManagement.Infrastructure.Persistence.ExecuteStoredProcedures;
 
-namespace ErpSoftware.HttpApi.Controllers.Auth;
+namespace SecurityManagement.HttpApi.Controllers;
 
 [Route("api/v1/[controller]")]
 public class AccountController : JsonApiControllerBase
@@ -35,7 +35,7 @@ public class AccountController : JsonApiControllerBase
     [HttpPost("query")]
     public async Task<IActionResult> GetAll([FromBody] DynamicQueryDto dto)
     {
-        var data = await _userService.ReadAllAsync(dto, HttpContext.RequestAborted);
+        var data = await _userService.ReadAllAsync(dto);
         return ControllerContext.MakeDynamicQueryResponse(data.Payload, data.TotalCount, dto.Size);
     }
 
@@ -71,7 +71,7 @@ public class AccountController : JsonApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login(UserLoginRequest dto,
-        [FromHeader(Name = ApplicationConstants.RecaptchaResponseHeaderKey)]
+        [FromHeader(Name = SecurityManagementApplicationConstants.RecaptchaResponseHeaderKey)]
         string recaptchaResponseCode, [FromServices] IOptions<JwtOptions> jwtOptions
     )
     {
@@ -87,10 +87,10 @@ public class AccountController : JsonApiControllerBase
         {
             var tokenData = await _userService.HandleSuccessfulLoginAsync(entity.Id, dto.RememberMe);
 
-            HttpContext.Response.Cookies.Append(ApplicationConstants.AccessTokenCookieKey,
+            HttpContext.Response.Cookies.Append(SecurityManagementApplicationConstants.AccessTokenCookieKey,
                 tokenData.AccessTokenData.token, tokenData.CookieOptions);
 
-            HttpContext.Response.Cookies.Append(ApplicationConstants.RefreshTokenCookieKey,
+            HttpContext.Response.Cookies.Append(SecurityManagementApplicationConstants.RefreshTokenCookieKey,
                 tokenData.RefreshTokenData.token, tokenData.CookieOptions);
 
             return Ok(jwtOptions.Value.AccessTokenExpiryMinutes);
@@ -113,8 +113,8 @@ public class AccountController : JsonApiControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public IActionResult Logout()
     {
-        HttpContext.Response.Cookies.Delete(ApplicationConstants.AccessTokenCookieKey);
-        HttpContext.Response.Cookies.Delete(ApplicationConstants.XsrfTokenCookieKey);
+        HttpContext.Response.Cookies.Delete(SecurityManagementApplicationConstants.AccessTokenCookieKey);
+        HttpContext.Response.Cookies.Delete(SecurityManagementApplicationConstants.XsrfTokenCookieKey);
         return Ok();
     }
 
