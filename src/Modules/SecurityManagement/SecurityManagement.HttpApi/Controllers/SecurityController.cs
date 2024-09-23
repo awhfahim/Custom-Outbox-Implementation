@@ -1,15 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using MtslErp.Common.HttpApi.ActionFilters;
 using MtslErp.Common.HttpApi.Controllers;
 using SecurityManagement.Application;
 using SecurityManagement.Application.Features.AuthFeatures;
 using SecurityManagement.Application.Features.AuthFeatures.Interfaces;
 
-namespace ErpSoftware.HttpApi.Controllers.Auth;
+namespace SecurityManagement.HttpApi.Controllers;
 
 [Route("api/v1/[controller]")]
 public class SecurityController : JsonApiControllerBase

@@ -1,6 +1,6 @@
 namespace MtslErp.Common.Domain.Enums;
 
-public enum MatchablePermissionGroup
+public enum MatchablePermissionGroup : uint
 {
-    FixedRole
+    ModeratorOnly = 1
 }

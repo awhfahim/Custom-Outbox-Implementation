@@ -5,7 +5,6 @@ using MtslErp.Common.Application.Data;
 using PrintFactoryManagement.Application;
 using PrintFactoryManagement.Domain.Repositories;
 using PrintFactoryManagement.Domain.Repositories.Outbox;
-using PrintFactoryManagement.Infrastructure.Data;
 using PrintFactoryManagement.Infrastructure.OutboxProcessor;
 using PrintFactoryManagement.Infrastructure.Persistence;
 using PrintFactoryManagement.Infrastructure.Persistence.Repositories;
@@ -19,15 +18,13 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        #region repositories
+        #region Add Repositories
 
         services.AddScoped<IPrintFactoryOutboxRepository, PrintFactoryOutboxRepository>();
-        services.TryAddScoped<IUserRepository, UserRepository>();
 
         #endregion
 
         services.AddScoped<IPrintFactoryAppUnitOfWork, PrintFactoryAppUnitOfWork>();
-        services.TryAddScoped<IDbConnectionFactory, PfmDbConnectionFactory>();
 
         services
             .ConfigureOptions<

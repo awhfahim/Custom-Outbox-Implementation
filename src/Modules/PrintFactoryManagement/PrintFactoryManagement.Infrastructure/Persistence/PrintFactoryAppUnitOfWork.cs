@@ -7,13 +7,11 @@ namespace PrintFactoryManagement.Infrastructure.Persistence;
 public class PrintFactoryAppUnitOfWork : PrintFactoryUnitOfWork, IPrintFactoryAppUnitOfWork
 {
     public PrintFactoryAppUnitOfWork(PrintFactoryDbContext dbContext,
-        IPrintFactoryOutboxRepository printFactoryOutboxRepository,
-        IUserRepository userRepository) : base(dbContext)
+        IPrintFactoryOutboxRepository printFactoryOutboxRepository)
+        : base(dbContext)
     {
         PrintFactoryOutboxRepository = printFactoryOutboxRepository;
-        UserRepository = userRepository;
     }
 
     public IPrintFactoryOutboxRepository PrintFactoryOutboxRepository { get; }
-    public IUserRepository UserRepository { get; }
 }

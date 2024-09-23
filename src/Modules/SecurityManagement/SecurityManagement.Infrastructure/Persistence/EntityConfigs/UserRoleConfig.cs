@@ -1,3 +1,4 @@
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SecurityManagement.Domain.Entities;
@@ -9,7 +10,7 @@ public class UserRoleConfig : IEntityTypeConfiguration<UserRole>
 {
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {
-        builder.ToTable(DbTableName);
+        builder.ToTable(DbTableName.Underscore().ToUpper());
 
         builder.HasKey(x => new { x.UserId, x.AuthorizableRoleId });
 

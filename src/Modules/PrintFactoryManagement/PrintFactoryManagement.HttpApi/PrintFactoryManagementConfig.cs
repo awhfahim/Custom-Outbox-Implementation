@@ -25,7 +25,8 @@ public static class PrintFactoryManagementConfig
 
     public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator)
     {
-        registrationConfigurator.AddConsumer<UserRegisteredEventConsumer>();
+        //Example of how to add a consumer
+        //registrationConfigurator.AddConsumer<UserRegisteredEventConsumer>();
     }
 }
 public static class RabbitMqBusFactoryConfiguratorExtensions
@@ -33,17 +34,19 @@ public static class RabbitMqBusFactoryConfiguratorExtensions
     public static void ConfigurePrintModuleEndpoints(this IRabbitMqBusFactoryConfigurator configurator,
         IBusRegistrationContext context, RabbitMqSettings rabbitMqSettings)
     {
-        configurator.ReceiveEndpoint("user-created-event-queue", e =>
-        {
-            e.ConfigureConsumeTopology = false;
+        //Example of how to configure an endpoint
 
-            e.Bind<UserRegisteredEvent>(x =>
-            {
-                x.ExchangeType = ExchangeType.Fanout;
-                x.RoutingKey = "user-created-event";
-            });
-
-            e.ConfigureConsumer<UserRegisteredEventConsumer>(context);
-        });
+        // configurator.ReceiveEndpoint("user-created-event-queue", e =>
+        // {
+        //     e.ConfigureConsumeTopology = false;
+        //
+        //     e.Bind<UserRegisteredEvent>(x =>
+        //     {
+        //         x.ExchangeType = ExchangeType.Fanout;
+        //         x.RoutingKey = "user-created-event";
+        //     });
+        //
+        //     e.ConfigureConsumer<UserRegisteredEventConsumer>(context);
+        // });
     }
 }

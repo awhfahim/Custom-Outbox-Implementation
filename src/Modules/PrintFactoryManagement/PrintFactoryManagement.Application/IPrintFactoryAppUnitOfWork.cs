@@ -7,5 +7,4 @@ namespace PrintFactoryManagement.Application;
 public interface IPrintFactoryAppUnitOfWork : IUnitOfWork
 {
     IPrintFactoryOutboxRepository PrintFactoryOutboxRepository { get; }
-    IUserRepository UserRepository { get; }
 }

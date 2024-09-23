@@ -6,7 +6,7 @@ public record UserSignupRequest(
     string FullName,
     string UserName,
     string Password,
-    DateOnly DateOfBirth,
+    DateTime DateOfBirth,
     Gender Gender,
     MaritalStatus MaritalStatus,
     string? Email,

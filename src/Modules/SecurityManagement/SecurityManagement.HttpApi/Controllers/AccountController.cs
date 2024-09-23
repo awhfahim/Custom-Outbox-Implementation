@@ -11,7 +11,6 @@ using SecurityManagement.Application.Features.AuthFeatures.DataTransferObjects;
 using SecurityManagement.Application.Features.AuthFeatures.Interfaces;
 using SecurityManagement.Application.Features.AuthFeatures.Outcomes;
 using SecurityManagement.Application.Options;
-using SecurityManagement.Infrastructure.Persistence.ExecuteStoredProcedures;
 
 namespace SecurityManagement.HttpApi.Controllers;
 
@@ -40,7 +39,7 @@ public class AccountController : JsonApiControllerBase
     }
 
     [HttpPost("registration")]
-    [ValidateAngularXsrfToken]
+    //[ValidateAngularXsrfToken]
     [ValidationActionFilter<UserSignupRequest>]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -59,12 +58,14 @@ public class AccountController : JsonApiControllerBase
             };
         }
 
-        return ControllerContext.MakeResponse(StatusCodes.Status201Created);
+        result.TryPickGoodOutcome(out var id);
+
+        return ControllerContext.MakeResponse(StatusCodes.Status201Created, id);
     }
 
     [HttpPost("login")]
     [AllowAnonymous]
-    [ValidateAngularXsrfToken]
+    //[ValidateAngularXsrfToken]
     [ValidationActionFilter<UserLoginRequest>]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -107,7 +108,7 @@ public class AccountController : JsonApiControllerBase
 
     [HttpPost("logout")]
     [Authorize]
-    [ValidateAngularXsrfToken]
+    //[ValidateAngularXsrfToken]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -137,13 +138,5 @@ public class AccountController : JsonApiControllerBase
         {
             return false;
         }
-    }
-
-    [HttpGet("call-stored-procedure")]
-    public async Task<IActionResult> CallStoredProcedure()
-    {
-        var test = new Test(_serviceProvider);
-        var result = await test.TestMethod();
-        return Ok(result);
     }
 }

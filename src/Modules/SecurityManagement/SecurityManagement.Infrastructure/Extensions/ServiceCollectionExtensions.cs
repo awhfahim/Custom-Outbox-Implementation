@@ -39,6 +39,8 @@ public static class ServiceCollectionExtensions
             (dbContextOptions) => dbContextOptions
                 .UseOracle(dbUrl,
                     x => { x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); })
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors()
         );
 
         return services;
@@ -156,6 +158,8 @@ public static class ServiceCollectionExtensions
             await AddPermissions(dbContext, dateTimeProvider);
             await AddPermissionGroups(dbContext, dateTimeProvider);
             await dbContext.SaveChangesAsync();
+            await SeedRelationalPermissionGroups(dbContext, dateTimeProvider);
+            await SeedAdminUserPermissionAsync(dbContext, configuration, dateTimeProvider);
         }
         catch (Exception)
         {
@@ -166,7 +170,7 @@ public static class ServiceCollectionExtensions
             await transaction.CommitAsync();
         }
 
-        await SeedRelationalPermissionGroups(dbContext, dateTimeProvider);
+
         return services;
     }
 
@@ -257,9 +261,98 @@ public static class ServiceCollectionExtensions
         await dbContext.AuthorizablePermissionGroups.AddRangeAsync(insertablePermissionsGroups);
     }
 
+    private static async Task<bool> SeedAdminUserPermissionAsync(SecurityManagementDbContext dbContext,
+        IConfiguration configuration, IDateTimeProvider dateTimeProvider)
+    {
+        var seedData = configuration.GetRequiredSection(AdminUserSeedOptions.SectionName)
+            .Get<AdminUserSeedOptions>();
+
+        ArgumentNullException.ThrowIfNull(seedData);
+
+        var superAdmin = await dbContext.Users.FirstOrDefaultAsync(x => x.UserName == seedData.UserName);
+
+        if (superAdmin is null)
+        {
+            return false;
+        }
+
+        var superAdminPermission = await dbContext.AuthorizablePermissions.FirstOrDefaultAsync(x =>
+            x.Label == MatchablePermission.SuperAdmin.ToString());
+
+        if (superAdminPermission is null)
+        {
+            return false;
+        }
+
+        var hasSuperAdminRole = await dbContext.AuthorizableRoles.AnyAsync(x =>
+            x.Label == MatchablePermission.SuperAdmin.ToString());
+
+        if (hasSuperAdminRole is false)
+        {
+            var role = new AuthorizableRole
+            {
+                Label = MatchablePermission.SuperAdmin.ToString(),
+                CreatedAtUtc = dateTimeProvider.CurrentUtcTime
+            };
+
+            await dbContext.AuthorizableRoles.AddAsync(role);
+            await dbContext.SaveChangesAsync();
+        }
+
+        var superAdminRole = await dbContext.AuthorizableRoles.FirstOrDefaultAsync(x =>
+            x.Label == MatchablePermission.SuperAdmin.ToString());
+
+        if (superAdminRole is null)
+        {
+            return false;
+        }
+
+        var existingRolePermission = await dbContext.RolePermissions.AnyAsync(x =>
+            x.AuthorizableRoleId == superAdminRole.Id &&
+            x.AuthorizablePermissionId == superAdminPermission.Id);
+
+        if (existingRolePermission is false)
+        {
+            var rp = new RolePermission
+            {
+                AuthorizableRoleId = superAdminRole.Id,
+                AuthorizablePermissionId = superAdminPermission.Id,
+                CreatedAtUtc = dateTimeProvider.CurrentUtcTime
+            };
+
+            await dbContext.RolePermissions.AddAsync(rp);
+            await dbContext.SaveChangesAsync();
+        }
+
+        var superAdminUserRole = await dbContext.UserRoles.AnyAsync(x =>
+            x.UserId == superAdmin.Id && x.AuthorizableRoleId == superAdminRole.Id);
+
+        if (superAdminUserRole)
+        {
+            return false;
+        }
+
+        var superAdminUserRoleForAssign = new UserRole
+        {
+            AuthorizableRoleId = superAdminRole.Id,
+            UserId = superAdmin.Id,
+            CreatedAtUtc = dateTimeProvider.CurrentUtcTime
+        };
+
+        await dbContext.UserRoles.AddAsync(superAdminUserRoleForAssign);
+        await dbContext.SaveChangesAsync();
+        return true;
+    }
+
+
     private static async Task<bool> CheckBeforeSeed(SecurityManagementDbContext dbContext)
     {
         if (EF.IsDesignTime)
+        {
+            return false;
+        }
+
+        if (dbContext.Database.HasPendingModelChanges())
         {
             return false;
         }
@@ -270,6 +363,7 @@ public static class ServiceCollectionExtensions
         {
             return false;
         }
+
 
         var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
 

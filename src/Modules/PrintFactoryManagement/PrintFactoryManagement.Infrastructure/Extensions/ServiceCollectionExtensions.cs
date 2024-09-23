@@ -28,6 +28,8 @@ public static class ServiceCollectionExtensions
             (dbContextOptions) => dbContextOptions
                 .UseOracle(dbUrl,
                     x => { x.UseOracleSQLCompatibility(OracleSQLCompatibility.DatabaseVersion19); })
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors()
         );
 
         return services;

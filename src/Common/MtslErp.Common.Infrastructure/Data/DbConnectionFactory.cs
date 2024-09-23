@@ -4,13 +4,13 @@ using MtslErp.Common.Application.Data;
 using MtslErp.Common.Application.Options;
 using Oracle.ManagedDataAccess.Client;
 
-namespace PrintFactoryManagement.Infrastructure.Data;
+namespace MtslErp.Common.Infrastructure.Data;
 
-internal sealed class PfmDbConnectionFactory : IDbConnectionFactory
+public sealed class DbConnectionFactory : IDbConnectionFactory
 {
     private readonly string _connectionString;
 
-    public PfmDbConnectionFactory(IOptions<ConnectionStringOptions> options)
+    public DbConnectionFactory(IOptions<ConnectionStringOptions> options)
     {
         _connectionString = options.Value.OracleDbConnectionString;
     }

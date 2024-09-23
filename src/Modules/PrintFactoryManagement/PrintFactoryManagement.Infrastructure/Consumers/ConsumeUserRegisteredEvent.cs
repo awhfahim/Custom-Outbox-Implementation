@@ -1,17 +1,19 @@
 ﻿using Dapper;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using MtslErp.Common.Application.Data;
 using MtslErp.Common.Domain.Events;
 
 namespace PrintFactoryManagement.Infrastructure.Consumers;
 
 public sealed class UserRegisteredEventConsumer(
-    IDbConnectionFactory dbConnectionFactory)
-    : IConsumer<UserRegisteredEvent>
+    IDbConnectionFactory dbConnectionFactory,
+    ILogger<UserRegisteredEventConsumer> logger)
 {
+    // Kept for reference
     public async Task Consume(ConsumeContext<UserRegisteredEvent> context)
     {
-        Console.WriteLine($"User Registered Event Received: {context.Message.UserName}");
+        logger.LogInformation("Processing UserRegisteredEvent.");
 
         await using var connection = await dbConnectionFactory.OpenConnectionAsync();
 
@@ -25,7 +27,7 @@ public sealed class UserRegisteredEventConsumer(
         try
         {
             var result = await connection.QuerySingleOrDefaultAsync<string?>(
-                "SELECT \"Id\" FROM PFM.\"InboxStates\" WHERE \"MessageId\" = :MessageId",
+                "SELECT \"Id\" FROM PFM.INBOX_STATES WHERE \"MessageId\" = :MessageId",
                 new { MessageId = context.MessageId.ToString() },
                 transaction: transaction);
 
@@ -36,12 +38,12 @@ public sealed class UserRegisteredEventConsumer(
             }
 
             await connection.ExecuteAsync(
-                "INSERT INTO PFM.\"InboxStates\" (\"MessageId\", \"ProcessedOn\") VALUES (:MessageId, :ProcessedOn)",
+                "INSERT INTO PFM.INBOX_STATES (\"MessageId\", \"ProcessedOn\") VALUES (:MessageId, :ProcessedOn)",
                 new { MessageId = context.MessageId.ToString(), ProcessedOn = DateTime.UtcNow },
                 transaction: transaction);
 
             await connection.ExecuteAsync(
-                "INSERT INTO PFM.\"Users\" " +
+                "INSERT INTO PFM.USERS " +
                 "(\"FullName\", \"UserName\", \"Email\", \"PhoneNumber\", \"DateOfBirth\", \"Address\", \"ProfilePictureUri\") " +
                 "VALUES (:FullName, :UserName, :Email, :PhoneNumber, :DateOfBirth, :Address, :ProfilePictureUri)",
                 new
@@ -50,17 +52,21 @@ public sealed class UserRegisteredEventConsumer(
                     UserName = context.Message.UserName,
                     Email = context.Message.Email,
                     PhoneNumber = context.Message.PhoneNumber,
-                    DateOfBirth = context.Message.DateOfBirth.ToString(),
+                    DateOfBirth = context.Message.DateOfBirth,
                     Address = context.Message.Address,
                     ProfilePictureUri = context.Message.ProfilePictureUri
                 },
                 transaction: transaction);
 
             await transaction.CommitAsync();
+            logger.LogInformation("User Registered Event Processed Successfully.");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex,
+                "Error processing UserRegisteredEvent. Rolling back transaction and scheduling redelivery.");
             await transaction.RollbackAsync();
+            await context.Redeliver(TimeSpan.FromMinutes(2));
         }
     }
 }

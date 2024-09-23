@@ -51,7 +51,7 @@ public class UserService : IUserService
         _jwtOptions = jwtOptions.Value;
     }
 
-    public async Task<ValueOutcome<User, SignUpBadOutcome>> SignUpAsync(UserSignupRequest dto)
+    public async Task<ValueOutcome<long, SignUpBadOutcome>> SignUpAsync(UserSignupRequest dto)
     {
         var exists = await _appUnitOfWork.UserRepository.ExistsAsync(
             x => x.UserName == dto.UserName
@@ -101,7 +101,7 @@ public class UserService : IUserService
         await _appUnitOfWork.SecurityManagementOutboxRepository.CreateAsync(outboxMessage);
         await _appUnitOfWork.UserRepository.CreateAsync(entity);
         await _appUnitOfWork.SaveAsync();
-        return entity;
+        return entity.Id;
     }
 
     public async Task<ValueOutcome<User, LoginBadOutcome>> LoginAsync(string userName, string password)

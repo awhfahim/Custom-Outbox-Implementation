@@ -5,8 +5,4 @@
       <ProjectReference Include="..\PrintFactoryManagement.Domain\PrintFactoryManagement.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\PrintFactoryFeatures\DataTransferObjects\" />
-    </ItemGroup>
-
 </Project>

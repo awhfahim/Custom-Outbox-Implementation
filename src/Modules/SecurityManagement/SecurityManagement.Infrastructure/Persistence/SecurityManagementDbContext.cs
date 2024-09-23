@@ -1,5 +1,7 @@
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using MtslErp.Common.Domain.Interfaces;
+using MtslErp.Common.Infrastructure;
 using MtslErp.Common.Infrastructure.Persistence.Config;
 using SecurityManagement.Domain.Entities;
 
@@ -17,33 +19,33 @@ public class SecurityManagementDbContext(DbContextOptions<SecurityManagementDbCo
     public DbSet<AuthorizablePermissionGroup> AuthorizablePermissionGroups =>
         Set<AuthorizablePermissionGroup>();
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema(SecurityManagementInfrastructureConstants.DbSchema);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SecurityManagementDbContext).Assembly);
-        modelBuilder.ApplyConfiguration(new OutboxMessageConfig());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ICommonInfrastructureMarker).Assembly);
+
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            var clrType = entityType.ClrType;
+            var autoIncrementalEntityInterface = Array.Find(entityType.ClrType.GetInterfaces(), i =>
+                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAutoIncrementalEntity<>));
 
-            var autoIncrementalEntityInterface = clrType
-                .GetInterfaces()
-                .FirstOrDefault(i => i.IsGenericType
-                                     && i.GetGenericTypeDefinition() == typeof(IAutoIncrementalEntity<>));
 
-            if (autoIncrementalEntityInterface is null)
+            if (autoIncrementalEntityInterface is not null)
             {
-                continue;
+                var idProperty = entityType.ClrType.GetProperty("Id");
+
+                if (idProperty is not null)
+                {
+                    modelBuilder.Entity(entityType.ClrType).Property(idProperty.PropertyType, "Id");
+                }
             }
 
-            var idProperty = clrType.GetProperty("Id");
-
-            if (idProperty is not null)
+            foreach (var mutableProperty in entityType.GetProperties())
             {
-                modelBuilder.Entity(clrType).Property(idProperty.PropertyType, "Id");
+                mutableProperty?.SetColumnName(mutableProperty.Name.Underscore().ToUpper());
             }
         }
     }

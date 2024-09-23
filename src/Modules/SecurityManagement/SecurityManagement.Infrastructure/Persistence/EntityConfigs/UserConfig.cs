@@ -1,3 +1,4 @@
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SecurityManagement.Domain.Entities;
@@ -9,7 +10,7 @@ public class UserConfig : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable(DbTableName);
+        builder.ToTable(DbTableName.Underscore().ToUpper());
 
         builder.Property(x => x.FullName)
             .HasMaxLength(FullNameMaxLength);

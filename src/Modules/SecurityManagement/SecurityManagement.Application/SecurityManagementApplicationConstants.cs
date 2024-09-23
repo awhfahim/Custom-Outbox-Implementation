@@ -1,3 +1,4 @@
+using System.Collections.Frozen;
 using MtslErp.Common.Domain.Enums;
 
 namespace SecurityManagement.Application;
@@ -12,13 +13,14 @@ public static class SecurityManagementApplicationConstants
     public const string XsrfTokenHeaderKey = "X-XSRF-TOKEN";
     public const string RecaptchaResponseHeaderKey = "X-RECAPTCHA-RESPONSE";
 
-    public static readonly Dictionary<MatchablePermissionGroup, HashSet<MatchablePermission>>
-        MatchablePermissionCategoryMapper = new()
-        {
+    public static readonly FrozenDictionary<MatchablePermissionGroup, HashSet<MatchablePermission>>
+        MatchablePermissionCategoryMapper =
+            new Dictionary<MatchablePermissionGroup, HashSet<MatchablePermission>>()
             {
-                MatchablePermissionGroup.FixedRole, [
-                    MatchablePermission.SuperAdmin
-                ]
-            },
-        };
+                {
+                    MatchablePermissionGroup.ModeratorOnly, [
+                        MatchablePermission.SuperAdmin
+                    ]
+                },
+            }.ToFrozenDictionary();
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using MtslErp.Common.Application.Data;
 using MtslErp.Common.Application.Providers;
 using MtslErp.Common.Domain.CoreProviders;
+using MtslErp.Common.Infrastructure.Data;
 using MtslErp.Common.Infrastructure.Providers;
 using Quartz;
 
@@ -16,6 +18,7 @@ public static class DependencyInjection
         services.TryAddSingleton<IGuidProvider, GuidProvider>();
         services.TryAddSingleton<IDateTimeProvider, DateTimeProvider>();
         services.TryAddSingleton<IReflectionCacheProvider, ReflectionCacheProvider>();
+        services.TryAddScoped<IDbConnectionFactory, DbConnectionFactory>();
 
         services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
         services.AddQuartz(q =>

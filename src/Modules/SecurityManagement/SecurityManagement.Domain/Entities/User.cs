@@ -14,7 +14,7 @@ public sealed class User : IAutoIncrementalEntity<long>, ITimestamp, IArchivable
     public required MaritalStatus MaritalStatus { get; set; }
     public required Gender Gender { get; set; }
     public string? ProfilePictureUri { get; set; }
-    public required DateOnly DateOfBirth { get; set; }
+    public required DateTime DateOfBirth { get; set; }
     public string? Address { get; set; }
     public required UserStatus Status { get; set; }
     public required DateTime CreatedAtUtc { get; init; }

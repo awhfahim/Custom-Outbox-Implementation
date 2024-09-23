@@ -12,7 +12,7 @@ public record UserResponse
     public required MaritalStatus MaritalStatus { get; init; }
     public required Gender Gender { get; init; }
     public string? ProfilePictureUri { get; init; }
-    public required DateOnly DateOfBirth { get; init; }
+    public required DateTime DateOfBirth { get; init; }
     public string? Address { get; init; }
     public required UserStatus Status { get; init; }
     public required DateTime CreatedAtUtc { get; init; }

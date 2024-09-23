@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Humanizer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MtslErp.Common.Domain.Entities;
 
@@ -8,7 +9,7 @@ public class OutboxMessageConfig : IEntityTypeConfiguration<OutboxMessage>
 {
     public void Configure(EntityTypeBuilder<OutboxMessage> builder)
     {
-        builder.ToTable("OutboxMessages");
+        builder.ToTable("OutboxMessages".Underscore().ToUpper());
         builder.HasKey(e => e.Id);
 
         builder.Property(e => e.Id)

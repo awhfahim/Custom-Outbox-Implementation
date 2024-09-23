@@ -9,6 +9,6 @@ public sealed class UserRegisteredEvent
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
     public string? ProfilePictureUri { get; set; }
-    public required DateOnly DateOfBirth { get; set; }
+    public required DateTime DateOfBirth { get; set; }
     public string? Address { get; set; }
 }

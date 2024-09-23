@@ -10,11 +10,9 @@ namespace SecurityManagement.Infrastructure.Providers;
 public class JwtProvider : IJwtProvider
 {
     private readonly IDateTimeProvider _dateTimeProvider;
-
     public JwtProvider(IDateTimeProvider dateTimeProvider)
     {
         _dateTimeProvider = dateTimeProvider;
-
     }
 
     public (string token, DateTime duration) GenerateJwt(IReadOnlyCollection<Claim> claims,

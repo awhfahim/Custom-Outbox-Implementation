@@ -12,7 +12,7 @@ namespace SecurityManagement.Application.Features.AuthFeatures.Interfaces;
 
 public interface IUserService
 {
-    Task<ValueOutcome<User, SignUpBadOutcome>> SignUpAsync(UserSignupRequest dto);
+    Task<ValueOutcome<long, SignUpBadOutcome>> SignUpAsync(UserSignupRequest dto);
     Task<ValueOutcome<User, LoginBadOutcome>> LoginAsync(string userName, string password);
     Task<User?> ReadProfileAsync(long id);
     Task<SuccessfulLoginPayload> HandleSuccessfulLoginAsync(long userId, bool rememberMe);

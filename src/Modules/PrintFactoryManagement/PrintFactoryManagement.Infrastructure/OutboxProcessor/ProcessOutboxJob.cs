@@ -29,7 +29,7 @@ public class ProcessOutboxJob(
         try
         {
             var pendingOutboxMessages = await connection.QueryAsync<OutboxMessage>(
-                "SELECT * FROM (SELECT * FROM PFM.\"OutboxMessages\" WHERE \"Status\" = 1) WHERE ROWNUM <= :BatchSize FOR UPDATE SKIP LOCKED",
+                "SELECT * FROM (SELECT * FROM PFM.OUTBOX_MESSAGES WHERE \"Status\" = 1) WHERE ROWNUM <= :BatchSize FOR UPDATE SKIP LOCKED",
                 new { BatchSize },
                 transaction: transaction);
 
@@ -54,7 +54,7 @@ public class ProcessOutboxJob(
                     }
 
                     await connection.ExecuteAsync(
-                        "DELETE FROM PFM.\"OutboxMessages\" WHERE \"Id\" = :Id",
+                        "DELETE FROM PFM.OUTBOX_MESSAGES WHERE \"Id\" = :Id",
                         new { message.Id },
                         transaction: transaction);
                 }

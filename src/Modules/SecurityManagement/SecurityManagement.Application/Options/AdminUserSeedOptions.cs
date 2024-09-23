@@ -10,5 +10,5 @@ public class AdminUserSeedOptions
     public required string Password { get; set; }
     public required MaritalStatus MaritalStatus { get; set; }
     public required Gender Gender { get; set; }
-    public required DateOnly DateOfBirth { get; set; }
+    public required DateTime DateOfBirth { get; set; }
 }
